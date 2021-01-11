@@ -13,7 +13,7 @@ const TabItem = ({id, title, icon, active = false, onClick }) => {
                onClick={handleClick}
                href="#">
                 <span className="hide-xs">{title}</span>
-                {!!icon && <span className="material-icons">{icon}</span> }
+                {!!icon && <span className={(`bi-${icon}`)} title={title}/> }
             </a>
         </li>
     );

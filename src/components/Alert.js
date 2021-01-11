@@ -65,7 +65,7 @@ export default class Alert extends Component {
 
         return (
             <div className={className}>
-                <strong className="mr-1">{title || ''}</strong>
+                <strong className="me-1">{title || ''}</strong>
                 {message || children}
                 {!!count && count > 1 && (
                     <Badge type={type} text={String(count)}/>

@@ -2,6 +2,8 @@ import React from 'react';
 import classNames from 'classnames';
 import LoginInput from "./LoginInput";
 import CountdownTimer from "./CountdownTimer";
+import LogInIcon from "./LogInIcon";
+import CancelIcon from "./CancelIcon";
 
 const UserLoginForm = ({className = {}, timerOffset = 0, onLogin, onCancel}) => {
     const onSubmit = (ev) => {
@@ -14,12 +16,12 @@ const UserLoginForm = ({className = {}, timerOffset = 0, onLogin, onCancel}) => 
         <form className={classNames(className)} onSubmit={onSubmit}>
             <LoginInput />
             {!!timerOffset && <CountdownTimer startOffset={timerOffset} onComplete={onCancel}  />}
-            <div className="tc__login-container--buttons mt-1">
+            <div className="tc__login-container--buttons mt-3">
                 <button type="submit" className="btn btn-large btn-primary">
-                    Log In <span className="material-icons">face</span>
+                    Log In <LogInIcon />
                 </button>
                 <button type="reset" className="btn btn-large btn-secondary" onClick={onCancel}>
-                    Cancel <span className="material-icons">clear</span>
+                    Cancel <CancelIcon />
                 </button>
             </div>
         </form>

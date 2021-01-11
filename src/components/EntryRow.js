@@ -15,7 +15,8 @@ const ClockAction = ({date = new Date(), isClockOut = false}) => (
 const EntryRow = ({idEntryType, Approved, EmployeeApproved, EntryDate, clockInTime, clockOutTime, Duration, errors, isClockedIn}) => {
     const entryDate = new Date(EntryDate * 1000);
     const iconClassName = {
-        'material-icons': true,
+        'bi-hand-thumbs-up-fill': !errors.length && (!!EmployeeApproved || !!Approved),
+        'bi-exclamation-circle-fill': !!errors.length,
         'text-danger': errors.length > 0,
         'text-light': !errors.length && !EmployeeApproved && !Approved,
         'text-info': !errors.length && !!EmployeeApproved && !Approved,
@@ -23,7 +24,7 @@ const EntryRow = ({idEntryType, Approved, EmployeeApproved, EntryDate, clockInTi
     }
     return (
         <tr className={classNames({'table-danger': errors.length > 0, 'table-info': isClockedIn})}>
-            <td><span className={classNames(iconClassName)}>{errors.length ? 'error_outline' : 'thumb_up_alt'}</span></td>
+            <td><span className={classNames(iconClassName)} /></td>
             <td><EntryType idEntryType={idEntryType}/></td>
             <td>{entryDate.toLocaleDateString(undefined, {weekday: 'short'})}</td>
             {!!clockInTime && <td><ClockAction date={new Date(clockInTime * 1000)}/></td>}

@@ -3,19 +3,26 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types'
 import Time from "./Time";
 import {ENTRY_PL} from "../constants";
-import classNames from 'classnames';
 import Alert from "./Alert";
 import PayPeriodSelect from "./PayPeriodSelect";
 import {approvePayPeriod, getUserInfo} from '../actions/user';
 import FormGroupText from "./FormGroupText";
-import DateRange from "./DateRange";
 import parse from 'date-fns/parse';
+import BlockButton from "./BlockButton";
 
 const parseFormat = 'y-MM-dd HH:mm:ss';
 
 function mapStateToProps({user}) {
     const {entries} = user.employee;
-    const {weeks, id, approved, approvedByName, approvalTime, employeeApproved, employeeApprovalTime} = user.employee.payPeriod;
+    const {
+        weeks,
+        id,
+        approved,
+        approvedByName,
+        approvalTime,
+        employeeApproved,
+        employeeApprovalTime
+    } = user.employee.payPeriod;
 
     return {
         idPayPeriod: id,
@@ -88,7 +95,16 @@ class PayPeriodApproveSummary extends Component {
     }
 
     render() {
-        const {weeks, entries, idPayPeriod, approved, approvalTime, approvedByName, employeeApproved, employeeApprovalTime} = this.props;
+        const {
+            weeks,
+            entries,
+            idPayPeriod,
+            approved,
+            approvalTime,
+            approvedByName,
+            employeeApproved,
+            employeeApprovalTime
+        } = this.props;
         const hasErrors = weeks[0].errors + weeks[1].errors > 0;
         const plTotal = entries.filter(entry => entry.idEntryType === ENTRY_PL).reduce((acc, entry) => acc + entry.Duration, 0);
         const isClockedIn = entries.reduce((acc, entry) => acc || entry.isClockedIn, false);
@@ -103,7 +119,7 @@ class PayPeriodApproveSummary extends Component {
                     <PayPeriodSelect value={idPayPeriod} onChange={this.onChangePayPeriod}/>
                 </div>
                 <form onSubmit={this.onSubmit}>
-                    <div className="tc__approval-form">
+                    <div className="tc__approval-form mb-3">
                         <FormGroupText label="Week 1" className={w1ClassName}>
                             <Time seconds={weeks[0].duration}/>
                         </FormGroupText>
@@ -122,15 +138,15 @@ class PayPeriodApproveSummary extends Component {
                     </div>
 
                     {!employeeApproved && !isClockedIn && (
-                        <button type="submit" className={classNames('btn btn-block', {
-                            'btn-danger': hasErrors,
-                            'btn-primary': !hasErrors,
-                        })} disabled={hasErrors}>
+                        <BlockButton className={{'btn-danger': hasErrors, 'btn-primary': !hasErrors}}
+                                     disabled={hasErrors}
+                                     type="submit">
                             Approve Pay Period
-                        </button>
+                        </BlockButton>
                     )}
                     {isClockedIn && (
-                        <Alert type="info" title="Notice:">You are currently still clocked in for this pay period.</Alert>
+                        <Alert type="info" title="Notice:">You are currently still clocked in for this pay
+                            period.</Alert>
                     )}
                     {employeeApproved && (
                         <Alert title="Approved:" type="success">You have approved this pay period

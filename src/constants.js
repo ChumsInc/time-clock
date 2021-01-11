@@ -21,9 +21,9 @@ export const CLOCK_ACTION_CLOCK_IN = 'clock-in';
 export const CLOCK_ACTION_CLOCK_OUT = 'clock-out';
 
 export const TABS = [
-    {id: 'clock', title: 'Clock In/Out', icon: 'schedule'},
-    {id: 'login', title: 'Info', icon: 'person'},
-    {id: 'approve', title: 'Approve', icon: 'thumb_up_alt'},
+    {id: 'clock', title: 'Clock In/Out', icon: 'clock-fill'},
+    {id: 'login', title: 'Info', icon: 'person-fill'},
+    {id: 'approve', title: 'Approve', icon: 'hand-thumbs-up-fill'},
 ];
 
 export const DEFAULT_BANNER = {

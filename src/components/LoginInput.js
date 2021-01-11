@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import PropTypes from 'prop-types'
 import {setLoginCode} from '../actions/user';
 import classNames from 'classnames';
+import CancelIcon from "./CancelIcon";
 
 function mapStateToProps({user}) {
     const {code} = user;
@@ -66,26 +67,22 @@ class LoginInput extends Component {
             'btn-secondary': !!showCode
         }
         return (
-            <div className="input-group input-group-large">
-                <div className="input-group-prepend">
-                    <span className="input-group-text">Login</span>
-                </div>
+            <div className="input-group input-group-large login-input">
+                <span className="input-group-text">Login</span>
                 <input type={showCode ? 'text' : 'password'} className="form-control form-control-lg"
                        ref={this.ref}
                        value={code}
                        minLength={4}
                        required={true}
                        onChange={this.onChange}/>
-                <div className="input-group-append">
-                   <button type="button" className={classNames(buttonClassNames)}
-                           onMouseDown={this.onShow} onTouchStart={this.onShow}
-                           onMouseUp={this.onHide} onTouchCancel={this.onHide} onTouchEnd={this.onHide} >
-                       <span className="material-icons">visibility</span>
-                   </button>
-                   <button type="button" className={classNames(buttonClassNames)} onClick={this.onCancel} >
-                       <span className="material-icons">cancel</span>
-                   </button>
-                </div>
+                <button type="button" className={classNames(buttonClassNames)}
+                        onMouseDown={this.onShow} onTouchStart={this.onShow}
+                        onMouseUp={this.onHide} onTouchCancel={this.onHide} onTouchEnd={this.onHide} >
+                    <span className="bi-eye-fill" title="View Password" />
+                </button>
+                <button type="button" className={classNames(buttonClassNames)} onClick={this.onCancel} >
+                    <CancelIcon />
+                </button>
             </div>
         );
     }

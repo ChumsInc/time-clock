@@ -16,7 +16,6 @@ export const fetchBanners = () => (dispatch, getState) => {
     fetchGET(url)
         .then(res => {
             const list = res.banners || [];
-            console.log(list);
             dispatch({type: FETCH_BANNERS, status: FETCH_SUCCESS, list: list || []});
             bannerTimer = setTimeout(fetchBanners, 60 * 60 * 1000);
         })

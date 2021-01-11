@@ -8,6 +8,7 @@ import PayPeriodEntries from "./PayPeriodEntries";
 import PayPeriodApproveSummary from "./PayPeriodApproveSummary";
 import Banner from "./Banner";
 import ProgressBar from "./ProgressBar";
+import BlockButton from "./BlockButton";
 
 function mapStateToProps({user}) {
     const {code, employee, loading} = user;
@@ -74,10 +75,7 @@ class ApprovalPage extends Component {
                             <PayPeriodApproveSummary/>
                             <hr className="mb-3"/>
                             <PayPeriodEntries/>
-                            <button className="btn btn-block btn-primary"
-                                    onClick={this.props.clearUser}>
-                                Done
-                            </button>
+                            <BlockButton onClick={this.props.clearUser}>Done</BlockButton>
                         </Fragment>
                     )}
                 </div>

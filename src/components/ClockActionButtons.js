@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import PropTypes from 'prop-types';
 import {CLOCK_ACTION_CLOCK_IN, CLOCK_ACTION_CLOCK_OUT} from "../constants";
+import ClockIcon from "./ClockIcon";
+import ClockOutIcon from "./ClockOutIcon";
 
 export default class ClockActionButtons extends Component {
     static propTypes = {
@@ -26,13 +28,13 @@ export default class ClockActionButtons extends Component {
                 {(!requiresOverride || action === CLOCK_ACTION_CLOCK_IN) && (
                     <button type="submit" className="btn btn-success btn-large"
                             onClick={this.props.onClockIn}>
-                        {overrideText || 'Clock In'} <span className="material-icons">schedule</span>
+                        {overrideText || 'Clock In'} <ClockIcon />
                     </button>
                 )}
                 {(!requiresOverride || action === CLOCK_ACTION_CLOCK_OUT) && (
                     <button type="submit" className="btn btn-danger btn-large"
                             onClick={this.props.onClockOut}>
-                        {overrideText || 'Clock Out'} <span className="material-icons">time_to_leave</span>
+                        {overrideText || 'Clock Out'} <ClockOutIcon />
                     </button>
                 )}
                 {!!requiresOverride && (

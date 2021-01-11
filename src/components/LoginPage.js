@@ -6,6 +6,7 @@ import UserLoginForm from "./UserLoginForm";
 import {clearUser, getUserInfo} from '../actions/user';
 import UserInfo from "./UserInfo";
 import Banner from "./Banner";
+import BlockButton from "./BlockButton";
 
 function mapStateToProps({user}) {
     const {code, employee} = user;
@@ -64,10 +65,7 @@ class LoginPage extends Component {
                     {!!employee.id && !!employee.payPeriod && (
                         <Fragment>
                             <UserInfo/>
-                            <button className="btn btn-block btn-primary"
-                                    onClick={this.props.clearUser}>
-                                Done
-                            </button>
+                            <BlockButton onClick={this.props.clearUser}>Done</BlockButton>
                         </Fragment>
                     )}
                 </div>

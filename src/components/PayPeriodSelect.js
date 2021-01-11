@@ -49,7 +49,7 @@ class PayPeriodSelect extends Component {
     render() {
         const {value, payPeriods, className} = this.props;
         return (
-            <select className={classNames("form-control form-control-lg", className)} value={String(value)} onChange={this.onChange}>
+            <select className={classNames("form-select form-select-lg", className)} value={String(value)} onChange={this.onChange}>
                 <optgroup label="Current">
                     {payPeriods
                         .filter(pp => !pp.completed)
