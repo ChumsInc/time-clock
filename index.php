@@ -15,7 +15,7 @@ $bodyPath = "/apps/time-clock";
 $title = "Chums Time Clock";
 $description = "";
 
-$ui = new WebUI($bodyPath, $title, $description, false, true);
+$ui = new WebUI($bodyPath, $title, $description, false, 5);
 $ui->version = "2020.10.09";
 $ui->bodyClassName = 'container';
 $ui->AddCSS("public/main.css", true);
