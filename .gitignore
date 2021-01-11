@@ -1,0 +1,4 @@
+/node_modules/
+/public/.sass-cache/
+/public/js/*.js
+/public/js/*.map
