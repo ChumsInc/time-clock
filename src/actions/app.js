@@ -19,6 +19,21 @@ export const setAlert = ({type = 'warning', title = 'Oops!', message = 'There wa
     alert: {type, title, message, action, count: 1}
 });
 
+
+/**
+ *
+ * @param {Error} err
+ * @param {String} context
+ * @return {{type: string, props: {context: string, type: string, title: *, message: *}}}
+ */
+export const handleError = (err, context = '') => {
+    console.trace(err.message);
+    return {
+        type: SET_ALERT,
+        props: {type: 'danger', title: err.name, message: err.message, context}
+    };
+};
+
 export const dismissAlert = (id) => ({type: DISMISS_ALERT, id});
 
 

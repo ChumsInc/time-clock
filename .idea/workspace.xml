@@ -1,8 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="4108d2c6-0918-49d8-b0c4-ca39504f4560" name="Default Changelist" comment="Update to main?">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="4108d2c6-0918-49d8-b0c4-ca39504f4560" name="Default Changelist" comment="Added .idea path to repository">
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/time-clock.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/banner.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/banner.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/actions/user.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/actions/user.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Alert.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Alert.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/AlertList.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/AlertList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/ApprovalPage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ApprovalPage.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/constants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/reducers/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/reducers/app.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -46,9 +58,11 @@
   </component>
   <component name="PropertiesComponent">
     <property name="ASKED_MARK_IGNORED_FILES_AS_EXCLUDED" value="true" />
+    <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="NewWatcherDialog.advanced.open" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="TODO_SCOPE" value="All Places" />
     <property name="WebServerToolWindowFactoryState" value="true" />
     <property name="javascript.nodejs.core.library.configured.version" value="15.4.0" />
@@ -97,7 +111,8 @@
       <workItem from="1607030763697" duration="38261000" />
       <workItem from="1610397394690" duration="8231000" />
       <workItem from="1610406413070" duration="244000" />
-      <workItem from="1610406676433" duration="3726000" />
+      <workItem from="1610406676433" duration="3880000" />
+      <workItem from="1610561373286" duration="5840000" />
     </task>
     <task id="LOCAL-00001" summary="Committing live version">
       <created>1610397741596</created>
@@ -127,7 +142,14 @@
       <option name="project" value="LOCAL" />
       <updated>1610406774619</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Added .idea path to repository">
+      <created>1610561339552</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1610561339552</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -180,7 +202,8 @@
     <MESSAGE value="Update to Bootstrap 5" />
     <MESSAGE value="Update to main?" />
     <MESSAGE value="Removed .idea" />
-    <option name="LAST_COMMIT_MESSAGE" value="Removed .idea" />
+    <MESSAGE value="Added .idea path to repository" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added .idea path to repository" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

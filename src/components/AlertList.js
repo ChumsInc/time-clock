@@ -28,7 +28,7 @@ class AlertList extends Component {
         return (
             <div>
                 {alerts
-                    .filter(alert => !!typeFilter || typeFilter === alert.type)
+                    .filter(alert => !typeFilter || typeFilter === alert.type)
                     .map((alert, key) => <Alert key={key} {...alert} onDismiss={onDismiss}/>)}
             </div>
         )

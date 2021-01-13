@@ -1,14 +1,18 @@
 import {
     CLEAR_USER,
     CLOCK_ACTION_URL,
-    FETCH_CLOCK_ACTION, FETCH_CLOCK_USER,
+    FETCH_CLOCK_ACTION,
+    FETCH_CLOCK_USER,
     FETCH_FAILURE,
     FETCH_INIT,
-    FETCH_SUCCESS, FETCH_USER_ACTION, SELECT_PAY_PERIOD, SET_COUNTDOWN_TIMER,
+    FETCH_SUCCESS,
+    FETCH_USER_ACTION,
+    SELECT_PAY_PERIOD,
+    SET_COUNTDOWN_TIMER,
     SET_LOGIN_CODE
 } from "../constants";
 import {fetchPOST} from "./fetch";
-import {errorAlert, setAlert} from "./app";
+import {handleError, setAlert} from "./app";
 
 export const setLoginCode = (code) => ({type: SET_LOGIN_CODE, code});
 
@@ -19,11 +23,21 @@ export const clockAction = (action, override = false) => (dispatch, getState) =>
     dispatch({type: FETCH_CLOCK_ACTION, status: FETCH_INIT});
     fetchPOST(CLOCK_ACTION_URL, body)
         .then(res => {
-            const {error, employee, entry, alert, userOverride: requiresOverride, buttontext: overrideText, confirm, success} = res;
+            const {
+                error,
+                employee,
+                entry,
+                alert,
+                userOverride: requiresOverride,
+                buttontext: overrideText,
+                confirm,
+                success
+            } = res;
             if (error) {
                 dispatch(setAlert({message: error}));
             }
-            dispatch({type: FETCH_CLOCK_ACTION, status: FETCH_SUCCESS,
+            dispatch({
+                type: FETCH_CLOCK_ACTION, status: FETCH_SUCCESS,
                 employee,
                 entry,
                 alert: alert || confirm,
@@ -35,7 +49,7 @@ export const clockAction = (action, override = false) => (dispatch, getState) =>
         .catch(err => {
             console.log(err.message);
             dispatch({type: FETCH_CLOCK_ACTION, status: FETCH_FAILURE});
-            dispatch(setAlert(errorAlert(err, 'clock-in')));
+            dispatch(handleError(err, FETCH_CLOCK_ACTION));
         })
 }
 
@@ -53,12 +67,19 @@ export const getUserInfo = (idPayPeriod = 0) => (dispatch, getState) => {
     fetchPOST(CLOCK_ACTION_URL, body)
         .then(res => {
             const {employee, isClockedIn, latest_entry, periods} = res;
-            dispatch({type: FETCH_CLOCK_USER, status: FETCH_SUCCESS, employee, entry: latest_entry, periods, isClockedIn});
+            dispatch({
+                type: FETCH_CLOCK_USER,
+                status: FETCH_SUCCESS,
+                employee,
+                entry: latest_entry,
+                periods,
+                isClockedIn
+            });
         })
         .catch(err => {
             console.log(err.message);
             dispatch({type: FETCH_CLOCK_ACTION, status: FETCH_FAILURE});
-            dispatch(setAlert(errorAlert(err, 'user-info')));
+            dispatch(handleError(err, FETCH_CLOCK_USER));
         });
 }
 
@@ -73,12 +94,19 @@ export const approvePayPeriod = () => (dispatch, getState) => {
     fetchPOST(CLOCK_ACTION_URL, body)
         .then(res => {
             const {employee, isClockedIn, latest_entry, periods} = res;
-            dispatch({type: FETCH_USER_ACTION, status: FETCH_SUCCESS, employee, entry: latest_entry, periods, isClockedIn});
+            dispatch({
+                type: FETCH_USER_ACTION,
+                status: FETCH_SUCCESS,
+                employee,
+                entry: latest_entry,
+                periods,
+                isClockedIn
+            });
         })
         .catch(err => {
             console.log(err.message);
             dispatch({type: FETCH_USER_ACTION, status: FETCH_FAILURE});
-            dispatch(setAlert(errorAlert(err, 'user-info')));
+            dispatch(handleError(err, FETCH_USER_ACTION));
         });
 }
 

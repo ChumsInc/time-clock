@@ -1,4 +1,4 @@
-import {FETCH_BANNERS, FETCH_FAILURE, FETCH_INIT, FETCH_SUCCESS} from "../constants";
+import {API_PATH_BANNERS, FETCH_BANNERS, FETCH_FAILURE, FETCH_INIT, FETCH_SUCCESS} from "../constants";
 import {fetchGET} from "./fetch";
 
 let bannerTimer = null;
@@ -12,8 +12,7 @@ export const fetchBanners = () => (dispatch, getState) => {
     clearTimeout(bannerTimer);
 
     dispatch({type: FETCH_BANNERS, status: FETCH_INIT});
-    const url = '/node-dev/timeclock/images/active';
-    fetchGET(url)
+    fetchGET(API_PATH_BANNERS, {cache: 'no-cache'})
         .then(res => {
             const list = res.banners || [];
             dispatch({type: FETCH_BANNERS, status: FETCH_SUCCESS, list: list || []});

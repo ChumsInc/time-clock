@@ -63,7 +63,8 @@ class ApprovalPage extends Component {
                     <Banner/>
                 </div>
                 <div className={"tc__approval-container col-lg-8"}>
-                    <h1>Approve</h1>
+                    {employee?.payPeriod?.completed && (<h1>Pay Period History</h1>)}
+                    {!employee?.payPeriod?.completed && (<h1>Approve</h1>)}
                     {!!loading && <ProgressBar striped={true} />}
                     {!employee.id && (
                         <UserLoginForm onLogin={this.props.getUserInfo}
