@@ -83,8 +83,8 @@ class PayPeriodApproveSummary extends Component {
 
     onSubmit(ev) {
         ev.preventDefault();
-        const {approved} = this.props;
-        if (approved) {
+        const {employeeApproved} = this.props;
+        if (employeeApproved) {
             return;
         }
         this.props.approvePayPeriod();
