@@ -3,3 +3,4 @@
 /public/js/*.js
 /public/js/*.map
 /.idea/
+/dist
