@@ -5,11 +5,16 @@ import BannerItem from "./BannerItem";
 import {fetchBannersAction, selectBannerList, selectBannerLoading, selectBannersLoaded} from "./index";
 import "./banner.scss";
 
-let timer:number = 0;
-
 const BannerCarousel: React.FC = () => {
     const dispatch = useDispatch();
     const carouselRef = useRef<HTMLDivElement>(null);
+    const list = useSelector(selectBannerList);
+    const loading = useSelector(selectBannerLoading);
+    const loaded = useSelector(selectBannersLoaded);
+
+    const [size, setSize] = useState(600);
+    const [active, setActive] = useState(0);
+    const [intervalHandle, setIntervalHandle] = useState(0);
 
     const getWidth = (): number => {
         if (carouselRef && carouselRef.current) {
@@ -17,12 +22,6 @@ const BannerCarousel: React.FC = () => {
         }
         return 300;
     }
-    const list = useSelector(selectBannerList);
-    const loading = useSelector(selectBannerLoading);
-    const loaded = useSelector(selectBannersLoaded);
-
-    const [size, setSize] = useState(600);
-    const [active, setActive] = useState(0);
 
     useEffect(() => {
         const resizeListener = () => {
@@ -33,37 +32,39 @@ const BannerCarousel: React.FC = () => {
             dispatch(fetchBannersAction());
         }
         setSize(getWidth());
-
+        if (list.length > 0) {
+            startCarousel();
+        }
         return function cleanUp() {
-            window.clearInterval(timer);
+            window.clearInterval(intervalHandle);
             window.removeEventListener('resize', resizeListener);
         }
     }, []);
 
     useEffect(() => {
-        console.log(`list.length: ${list.length}`);
-        window.clearInterval(timer);
-        setActive(0);
-        if (list.length === 0) {
-            return;
+        if (list.length > 0) {
+            startCarousel();
         }
-        timer = window.setInterval(rotateCarousel, 3000);
         return function cleanUp() {
-            window.clearInterval(timer);
+            window.clearInterval(intervalHandle);
         }
     }, [list.length]);
 
     const rotateCarousel = () => {
-        const nextActive = (active + 1) % list.length;
-        setActive(nextActive);
+        setActive(active => (active + 1) % list.length);
     }
     const startCarousel = () => {
-        console.log('startCarousel()')
-        timer = window.setInterval(rotateCarousel, 3000);
+        window.clearInterval(intervalHandle);
+        setActive(0);
+        if (list.length > 0) {
+            const timer = window.setInterval(rotateCarousel, 5000);
+            setIntervalHandle(timer);
+        }
     }
+
     const stopCarousel = () => {
         console.log('stopCarousel()');
-        window.clearInterval(timer);
+        window.clearInterval(intervalHandle);
     }
     const onClickIndicator = (index: number) => {
         stopCarousel();
