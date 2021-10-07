@@ -1,0 +1,20 @@
+.tc__clock-action,
+.tc__login-container,
+.tc__user-info-container,
+.tc__approval-container {
+  &--buttons {
+    display: flex;
+    justify-content: space-between;
+    .btn {
+      flex: 0 0 calc(50% - 0.25rem);
+      display: flex;
+      align-items: center;
+      justify-content: space-around;
+    }
+  }
+  @media screen and (max-width: 991.98px) {
+    .tc__banner-carousel {
+      display: none;
+    }
+  }
+}

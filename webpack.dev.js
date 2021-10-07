@@ -4,12 +4,8 @@ const common = require('./webpack.common.js');
 const path = require('path');
 
 const localProxy = {
-    target: {
-        host: 'localhost',
-        protocol: 'http:',
-        port: 8081
-    },
-    ignorePath: false,
+    target: 'http://localhost:8081',
+    // ignorePath: false,
     changeOrigin: true,
     secure: false,
 };
@@ -17,23 +13,26 @@ const localProxy = {
 module.exports = merge(common, {
     mode: 'development',
     devServer: {
-        contentBase: [path.join(__dirname, 'public'), __dirname],
+        allowedHosts: 'auto',
+        static: [path.join(__dirname, 'public'), __dirname],
         hot: true,
         proxy: {
             '/api': {...localProxy},
             '/images/': {...localProxy},
-            '/timeclock/': {...localProxy},
-            '/pdf/': {...localProxy},
-            '/files/': {...localProxy},
-            '/node_modules/': {...localProxy},
-            '/node-chums/': {...localProxy},
             '/node-dev/': {...localProxy},
             '/node-sage/': {...localProxy},
             '/sage/': {...localProxy},
+            '/timeclock': {...localProxy},
             '/version': {...localProxy},
-        }
+        },
+        historyApiFallback: {
+            rewrites: [
+                {from: /^apps\/direct-labor/, to: '/'}
+            ]
+        },
+        watchFiles: 'src/**/*',
     },
-    devtool: 'eval-source-map',
+    devtool: 'source-map',
     plugins: [
         new webpack.HotModuleReplacementPlugin(),
     ]

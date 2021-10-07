@@ -64,5 +64,5 @@ export const ENTRY_TYPE_DESCRIPTIONS = {
 
 export const CLOCK_ACTION_URL = '/timeclock/online/clockaction.json.php';
 export const CLOCK_IMAGE_URL = '/timeclock/images/:filename';
-export const API_PATH_VERSION = 'package.json';
+export const API_PATH_VERSION = './package.json';
 export const API_PATH_BANNERS = '/api/timeclock/images/active';

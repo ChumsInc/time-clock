@@ -1,13 +1,17 @@
 const path = require('path');
-const {BundleAnalyzerPlugin} = require('webpack-bundle-analyzer');
 
 module.exports = {
-    entry: './src/index.js',
+    entry: './src/index.tsx',
     module: {
         rules: [
             {
+                test: /\.tsx?$/,
+                use: ['ts-loader'],
+                exclude: /node_modules/,
+            },
+            {
                 test: /\.js$/,
-                exclude: '/node_modules/',
+                exclude: /node_modules/,
                 use: ['babel-loader']
             },
             {
@@ -16,12 +20,20 @@ module.exports = {
                     {loader: 'style-loader'},
                     {loader: 'css-loader'},
                 ],
+            },
+            {
+                test: /\.s[ac]ss$/i,
+                use: [
+                    'style-loader',
+                    'css-loader',
+                    'sass-loader',
+                ],
             }
         ]
     },
-    plugins: [
-        new BundleAnalyzerPlugin(),
-    ],
+    resolve: {
+        extensions: ['.tsx', '.ts', '.js'],
+    },
     optimization: {
         splitChunks: {
             cacheGroups: {
