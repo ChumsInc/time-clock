@@ -21,7 +21,11 @@ const Time: React.FC<TimeProps> =
          showIncrement
      }) => {
         let timer = 0;
+        console.log(seconds);
         const [time, setTime] = useState(toSeconds({hours, minutes, seconds}));
+        useEffect(() => {
+            setTime(toSeconds({hours, minutes, seconds}));
+        }, [hours, minutes, seconds]);
 
         useEffect(() => {
             if (showIncrement) {

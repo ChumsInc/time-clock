@@ -1,5 +1,5 @@
 {
-  "main.js": "/main.570c9776e914d226639b.js",
+  "main.js": "/main.399c8ef0ad9c25059eb7.js",
   "vendors.js": "/vendors.615df061e58358a832f4.js",
   "../../dist/src/types.d.ts": "/../../dist/src/types.d.ts",
   "../../dist/src/ducks/user/index.d.ts": "/../../dist/src/ducks/user/index.d.ts",
@@ -44,6 +44,6 @@
   "../../dist/src/ducks/user/LogInIcon.d.ts": "/../../dist/src/ducks/user/LogInIcon.d.ts",
   "../../dist/src/ducks/user/UserInfo.d.ts": "/../../dist/src/ducks/user/UserInfo.d.ts",
   "../../dist/src/components/App.d.ts": "/../../dist/src/components/App.d.ts",
-  "main.js.map": "/main.570c9776e914d226639b.js.map",
+  "main.js.map": "/main.399c8ef0ad9c25059eb7.js.map",
   "vendors.js.map": "/vendors.615df061e58358a832f4.js.map"
 }
