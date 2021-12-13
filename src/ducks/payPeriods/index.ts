@@ -11,7 +11,7 @@ export const selectClosedPayPeriods = (state: RootState) => {
     const hireDate = new Date(employee.HireDate).valueOf() / 1000;
     return state.payPeriods
         .filter(pp => pp.completed)
-        .filter(pp => pp.StartDate >= hireDate)
+        .filter(pp => pp.EndDate >= hireDate)
         .sort((a, b) => b.StartDate - a.StartDate)
 }
 
@@ -24,7 +24,7 @@ export const selectOpenPayPeriods = (state: RootState) => {
     const hireDate = new Date(employee.HireDate).valueOf() / 1000;
     return state.payPeriods
         .filter(pp => !pp.completed)
-        .filter(pp => pp.StartDate >= hireDate)
+        .filter(pp => pp.EndDate >= hireDate)
         .sort((a, b) => b.StartDate - a.StartDate)
 }
 
