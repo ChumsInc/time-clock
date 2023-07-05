@@ -1,16 +1,17 @@
 import React, {useEffect} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import Time from "./Time";
-import {getUserInfoAction, selectUserEntry, selectUserLoading} from "./index";
+import {loadUserInfo, selectUserEntry, selectUserLoading} from "./index";
+import {useAppDispatch} from "../../app/configureStore";
 
 const EmployeeEntry: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const entry = useSelector(selectUserEntry);
     const loading = useSelector(selectUserLoading);
 
     useEffect(() => {
         if (!entry && !loading) {
-            dispatch(getUserInfoAction());
+            dispatch(loadUserInfo(0));
         }
     })
 
@@ -26,7 +27,7 @@ const EmployeeEntry: React.FC = () => {
                         <td className="right">
                             {!entry.clockInTime && <span>Missing</span>}
                             {!!entry.clockInTime &&
-                            <span>{new Date(entry.clockInTime * 1000).toLocaleTimeString()}</span>}
+                                <span>{new Date(entry.clockInTime * 1000).toLocaleTimeString()}</span>}
                         </td>
                     </tr>
                     <tr>
@@ -34,7 +35,7 @@ const EmployeeEntry: React.FC = () => {
                         <td className="right">
                             {!entry.clockOutTime && <span>-</span>}
                             {!!entry.clockOutTime &&
-                            <span>{new Date(entry.clockOutTime * 1000).toLocaleTimeString()}</span>}
+                                <span>{new Date(entry.clockOutTime * 1000).toLocaleTimeString()}</span>}
                         </td>
                     </tr>
                     <tr>

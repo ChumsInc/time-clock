@@ -1,12 +1,13 @@
 import React from 'react';
 import BlockButton from "../../components/BlockButton";
-import {clearUserAction, getUserInfoAction, selectUserLoading} from "./index";
-import {useDispatch, useSelector} from "react-redux";
-import {SpinnerButton} from "chums-ducks";
+import {clearUserAction, loadUserInfo, selectUserLoading} from "./index";
+import {useSelector} from "react-redux";
+import {SpinnerButton} from "chums-components";
 import classNames from "classnames";
+import {useAppDispatch} from "../../app/configureStore";
 
-const UserDoneButtons:React.FC = () => {
-    const dispatch = useDispatch();
+const UserDoneButtons: React.FC = () => {
+    const dispatch = useAppDispatch();
     const loading = useSelector(selectUserLoading);
 
     return (
@@ -16,7 +17,7 @@ const UserDoneButtons:React.FC = () => {
             </div>
             <div className="col">
                 <div className={classNames("d-grid col-9 mx-auto tc__done-button")}>
-                    <SpinnerButton spinning={loading} color="secondary" onClick={() => dispatch(getUserInfoAction())}>
+                    <SpinnerButton spinning={loading} color="secondary" onClick={() => dispatch(loadUserInfo(0))}>
                         Reload
                     </SpinnerButton>
                 </div>

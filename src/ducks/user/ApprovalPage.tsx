@@ -1,16 +1,17 @@
 import React, {useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import CurrentDateTime from "./CurrentDateTime";
 import UserLoginForm from "./UserLoginForm";
 import PayPeriodEntries from "./PayPeriodEntries";
 import PayPeriodApproveSummary from "./PayPeriodApproveSummary";
 import BannerCarousel from "../banners/BannerCarousel";
-import {clearUserAction, getUserInfoAction, selectEmployee, selectUserCode, selectUserLoading} from "./index";
+import {clearUserAction, loadUserInfo, selectEmployee, selectUserCode, selectUserLoading} from "./index";
 import './info-container.scss';
 import UserDoneButtons from "./UserDoneButtons";
+import {useAppDispatch} from "../../app/configureStore";
 
 const ApprovalPage: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const code = useSelector(selectUserCode);
     const employee = useSelector(selectEmployee);
     const loading = useSelector(selectUserLoading);
@@ -19,7 +20,7 @@ const ApprovalPage: React.FC = () => {
 
     useEffect(() => {
         if (!employee && !loading && !!code) {
-            dispatch(getUserInfoAction());
+            dispatch(loadUserInfo(0));
         }
     }, []);
 
@@ -36,7 +37,7 @@ const ApprovalPage: React.FC = () => {
             </div>
             <div className={"tc__approval-container col-lg-8"}>
                 {!employee && (
-                    <UserLoginForm onLogin={() => dispatch(getUserInfoAction())}
+                    <UserLoginForm onLogin={() => dispatch(loadUserInfo(0))}
                                    onCancel={() => dispatch(clearUserAction())}
                                    timerOffset={startTime}/>
                 )}

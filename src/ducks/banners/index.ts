@@ -4,6 +4,8 @@ import {ActionInterface, ActionPayload, fetchJSON} from "chums-ducks";
 import {ThunkAction} from "redux-thunk";
 import {RootState} from "../index";
 import {API_PATH_BANNERS} from "../../constants";
+import {createAsyncThunk, createReducer} from "@reduxjs/toolkit";
+import {fetchBanners} from "../../api/banners";
 
 export interface BannerPayload extends ActionPayload {
     banners?: BannerImage[]
@@ -19,6 +21,18 @@ export interface BannerThunkAction extends ThunkAction<any, RootState, unknown, 
 const bannersFetchRequested = 'banners/fetchRequested';
 const bannersFetchSucceeded = 'banners/fetchSucceeded';
 const bannersFetchFailed = 'banners/fetchFailed';
+
+export interface BannersState {
+    list: BannerImage[];
+    loading: boolean;
+    loaded: boolean;
+}
+
+const initialState:BannersState = {
+    list: [],
+    loading: false,
+    loaded: false,
+}
 
 export const fetchBannersAction = (): BannerThunkAction =>
     async (dispatch, getState) => {
@@ -43,49 +57,35 @@ export const fetchBannersAction = (): BannerThunkAction =>
         }
     }
 
+export const loadBanners = createAsyncThunk<BannerImage[]>(
+    'banners/load',
+    async () => {
+        return await fetchBanners();
+    },
+    {
+        condition: (arg, {getState}) => {
+            const state = getState() as RootState;
+            return !selectBannerLoading(state);
+        }
+    }
+)
+
 export const selectBannerList = (state: RootState) => state.banners.list;
 export const selectBannerLoading = (state: RootState) => state.banners.loading;
 export const selectBannersLoaded = (state:RootState) => state.banners.loaded;
 
-const listReducer = (state: BannerImage[] = [], action: BannerAction): BannerImage[] => {
-    const {type, payload} = action;
-    switch (type) {
-    case bannersFetchSucceeded:
-        if (payload?.banners) {
-            return [...payload.banners];
-        }
-        return state;
-    default:
-        return state;
-    }
-}
+const bannersReducer = createReducer(initialState, (builder) => {
+    builder
+        .addCase(loadBanners.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(loadBanners.fulfilled, (state, action) => {
+            state.loading = false;
+            state.loaded = true;
+        })
+        .addCase(loadBanners.rejected, (state) => {
+            state.loading = false;
+        })
+})
 
-const loadingReducer = (state: boolean = false, action: BannerAction): boolean => {
-    switch (action.type) {
-    case bannersFetchRequested:
-        return true;
-    case bannersFetchSucceeded:
-    case bannersFetchFailed:
-        return false;
-    default:
-        return state;
-    }
-}
-
-const loadedReducer = (state: boolean = false, action: BannerAction): boolean => {
-    switch (action.type) {
-    case bannersFetchSucceeded:
-        return true;
-    case bannersFetchRequested:
-    case bannersFetchFailed:
-        return false;
-    default:
-        return state;
-    }
-}
-
-export default combineReducers({
-    list: listReducer,
-    loading: loadingReducer,
-    loaded: loadedReducer,
-});
+export default bannersReducer;

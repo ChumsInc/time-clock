@@ -132,3 +132,10 @@ export const ENTRY_TYPE_DESCRIPTIONS:EntryTypeDescriptions = {
     [ENTRY_FMLA67]: 'FMLA Leave',
     [ENTRY_FMLA100]: 'FMLA Leave',
 }
+
+export interface UserInfoResponse {
+    employee?:Employee|null;
+    isClockedIn?: boolean;
+    entry?: PayPeriodEntry;
+    periods?: PayPeriod[];
+}

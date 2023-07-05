@@ -2,7 +2,7 @@ import React, {useEffect, useRef, useState} from 'react';
 import {useDispatch, useSelector} from 'react-redux';
 import BannerIndicator from "./BannerIndicator";
 import BannerItem from "./BannerItem";
-import {fetchBannersAction, selectBannerList, selectBannerLoading, selectBannersLoaded} from "./index";
+import {fetchBannersAction, loadBanners, selectBannerList, selectBannerLoading, selectBannersLoaded} from "./index";
 import "./banner.scss";
 
 const BannerCarousel: React.FC = () => {
@@ -29,7 +29,7 @@ const BannerCarousel: React.FC = () => {
         }
         window.addEventListener('resize', resizeListener);
         if (!loaded && !loading) {
-            dispatch(fetchBannersAction());
+            dispatch(loadBanners());
         }
         setSize(getWidth());
         if (list.length > 0) {

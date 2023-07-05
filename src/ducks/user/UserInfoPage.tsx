@@ -1,21 +1,22 @@
 import React, {Fragment, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import CurrentDateTime from "./CurrentDateTime";
 import UserLoginForm from "./UserLoginForm";
 import UserInfo from "./UserInfo";
 import BannerCarousel from "../banners/BannerCarousel";
-import {clearUserAction, getUserInfoAction, selectEmployee, selectUserCode} from "./index";
+import {clearUserAction, loadUserInfo, selectEmployee, selectUserCode} from "./index";
 import './info-container.scss';
 import UserDoneButtons from "./UserDoneButtons";
+import {useAppDispatch} from "../../app/configureStore";
 
 const UserInfoPage: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const code = useSelector(selectUserCode);
     const employee = useSelector(selectEmployee);
 
     useEffect(() => {
         if (employee && !!code && !!employee.id && !employee.payPeriod) {
-            dispatch(getUserInfoAction());
+            dispatch(loadUserInfo(0));
         }
     }, []);
 
@@ -28,7 +29,7 @@ const UserInfoPage: React.FC = () => {
             </div>
             <div className="tc__user-info-container col-lg-8">
                 {!employee && (
-                    <UserLoginForm onLogin={() => dispatch(getUserInfoAction())}
+                    <UserLoginForm onLogin={() => dispatch(loadUserInfo(0))}
                                    onCancel={() => dispatch(clearUserAction())}/>
                 )}
                 {employee && !!employee.payPeriod && (

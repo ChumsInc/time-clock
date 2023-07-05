@@ -1,9 +1,11 @@
 import {combineReducers} from "redux";
 import {CLOCK_ACTION_URL} from "../../constants";
 import {ActionInterface, ActionPayload, fetchJSON, tabSelected} from "chums-ducks";
-import {Employee, PayPeriod, PayPeriodEntry} from "../../types";
+import {Employee, PayPeriod, PayPeriodEntry, UserInfoResponse} from "../../types";
 import {ThunkAction} from "redux-thunk";
 import {RootState} from "../index";
+import {createAction, createAsyncThunk, createReducer} from "@reduxjs/toolkit";
+import {fetchUserInfo} from "../../api/user";
 
 export interface UserPayload extends ActionPayload {
     code?: string,
@@ -24,6 +26,32 @@ export interface UserAction extends ActionInterface {
 
 export interface UserThunkAction extends ThunkAction<any, RootState, unknown, UserAction> {
 }
+
+export interface UserState {
+    code: string;
+    employee: Employee|null;
+    entry:PayPeriodEntry|null;
+    entryAlert: string|null;
+    requiresOverride: boolean;
+    overrideText: string|null;
+    clockActionFailed: boolean;
+    isClockedIn: boolean|null;
+    loading: boolean;
+}
+
+export const initialUserState:UserState = {
+    code: '',
+    employee: null,
+    entry: null,
+    entryAlert: null,
+    requiresOverride: false,
+    overrideText: null,
+    clockActionFailed: false,
+    isClockedIn: false,
+    loading: false,
+}
+
+
 
 export const userSetLoginCode = 'user/setLoginCode';
 export const userFetchRequested = 'user/fetchRequested';
@@ -49,6 +77,23 @@ export const selectRequiresOverride = (state:RootState): boolean => state.user.r
 export const selectOverrideText = (state:RootState):string|null => state.user.overrideText;
 export const selectClockActionFailed = (state:RootState):boolean => state.user.clockActionFailed;
 export const selectIsClockedIn = (state:RootState):boolean => state.user.isClockedIn;
+
+export const setLoginCode = createAction<string>('user/setLoginCode');
+export const clearUser = createAction('user/clearUser');
+export const loadUserInfo = createAsyncThunk<UserInfoResponse|null, number>(
+    'user/loadInfo',
+    async (arg, {getState}) => {
+        const state = getState() as RootState;
+        const code = selectUserCode(state);
+        return await fetchUserInfo({idPayPeriod: arg, code});
+    },
+    {
+        condition: (arg, {getState}) => {
+            const state = getState() as RootState;
+            return !!arg && !!selectUserCode(state);
+        }
+    }
+)
 
 export const setLoginCodeAction = (code: string): UserAction => ({type: userSetLoginCode, payload: {code}});
 
@@ -103,31 +148,6 @@ export const performClockAction = (action: string, override: boolean = false): U
 
 export const clearUserAction = () => ({type: userClearUser});
 
-export const getUserInfoAction = (idPayPeriod = 0): UserThunkAction =>
-    async (dispatch, getState) => {
-        try {
-            const state = getState();
-            if (selectUserLoading(state)) {
-                return;
-            }
-            dispatch({type: userFetchRequested});
-            const code = selectUserCode(state);
-            const body = {action: 'get-userinfo', code, idPayPeriod};
-            const response = await fetchJSON(CLOCK_ACTION_URL, {
-                method: 'POST',
-                body: JSON.stringify(body),
-            });
-            const {employee, isClockedIn, latest_entry, periods} = response;
-            dispatch({type: userFetchSucceeded, payload: {employee, isClockedIn, entry: latest_entry, periods}});
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                console.log("getUserInfoAction()", error.message);
-                return dispatch({type: userFetchFailed, payload: {error, context: userFetchRequested}})
-            }
-            console.error("getUserInfoAction()", error);
-        }
-    }
-
 export const approvePayPeriodAction = (): UserThunkAction =>
     async (dispatch, getState) => {
         try {
@@ -165,6 +185,30 @@ export const approvePayPeriodAction = (): UserThunkAction =>
         }
     }
 
+const userReducer = createReducer(initialUserState, (builder) => {
+    builder
+        .addCase(setLoginCode, (state, action) => {
+            state.code = action.payload ?? '';
+        })
+        .addCase(clearUser, (state) => {
+            state.code = '';
+            state.employee = null;
+            state.entry = null;
+            state.entryAlert = null;
+            state.requiresOverride = false;
+            state.overrideText = null;
+            state.clockActionFailed = false;
+            state.isClockedIn = false;
+            state.loading = false;
+        })
+        .addCase(loadUserInfo.pending, (state) => {
+            state.loading = true;
+        })
+        .addCase(loadUserInfo.fulfilled, (state, action) => {
+            state.employee = action.payload?.employee ?? null;
+            state.entry = action.payload?.entry ?? null;
+        })
+})
 const codeReducer = (state = '', action: UserAction) => {
     const {type, payload} = action;
     switch (type) {

@@ -1,26 +1,27 @@
 import React, {FormEvent, useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {ENTRY_PL} from "../../constants";
 import PayPeriodSelect from "../payPeriods/PayPeriodSelect";
 import TimeField from "./TimeField";
 import parseISO from 'date-fns/parseISO';
 import BlockButton from "../../components/BlockButton";
-import {approvePayPeriodAction, getUserInfoAction, selectEmployee, selectUserCode, selectUserLoading} from "./index";
+import {approvePayPeriodAction, loadUserInfo, selectEmployee, selectUserCode, selectUserLoading} from "./index";
 import classNames from "classnames";
-import {Alert} from "chums-ducks";
+import {Alert} from "chums-components";
 import EmployeeName from "./EmployeeName";
 import './ApprovalForm.scss';
+import {useAppDispatch} from "../../app/configureStore";
 
 
 const PayPeriodApproveSummary: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const employee = useSelector(selectEmployee);
     const loading = useSelector(selectUserLoading);
     const code = useSelector(selectUserCode);
 
     useEffect(() => {
         if (!employee && !loading && !!code) {
-            dispatch(getUserInfoAction());
+            dispatch(loadUserInfo(0));
         }
     }, [])
 
@@ -49,7 +50,7 @@ const PayPeriodApproveSummary: React.FC = () => {
     }
 
     const onChangePayPeriod = (id: number) => {
-        dispatch(getUserInfoAction(id));
+        dispatch(loadUserInfo(id));
 
     }
 
@@ -72,7 +73,8 @@ const PayPeriodApproveSummary: React.FC = () => {
                 <div className="tc__approval-form mb-3">
                     <TimeField label="Week 1" className={w1ClassName} seconds={weeks[0].duration}/>
                     <TimeField label="Week 2" className={w2ClassName} seconds={weeks[1].duration}/>
-                    <TimeField label="Overtime" className={otClassName} seconds={weeks[0].overtime + weeks[1].overtime}/>
+                    <TimeField label="Overtime" className={otClassName}
+                               seconds={weeks[0].overtime + weeks[1].overtime}/>
                     <TimeField label="Total" seconds={weeks[0].duration + weeks[1].duration}/>
                     <TimeField label="P/L" className={plClassName} seconds={plTotal}/>
                 </div>
