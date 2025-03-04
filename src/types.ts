@@ -139,3 +139,18 @@ export interface UserInfoResponse {
     entry?: PayPeriodEntry;
     periods?: PayPeriod[];
 }
+
+export type ClockAction = 'clock-in'|'clock-out'|'approve'|'login';
+
+export interface ClockActionPost {
+    action: ClockAction;
+    userOverride: boolean;
+    code: string;
+}
+export interface ClockActionResponse {
+    confirm?: string;
+    employee?: Employee|null;
+    entry?: PayPeriodEntry;
+    post?: ClockActionPost;
+    success?: boolean;
+}

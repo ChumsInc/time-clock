@@ -1,6 +1,6 @@
-import {createAction, createReducer, isRejected} from "@reduxjs/toolkit";
-import {RootState} from "../../app/configureStore";
+import {createReducer, isRejected} from "@reduxjs/toolkit";
 import {ErrorAlert} from "chums-components";
+import {addAlert, dismissAlert} from "./actions";
 
 export interface AlertsState {
     nextId: number;
@@ -11,11 +11,6 @@ export const initialAlertsState: AlertsState = {
     nextId: 0,
     list: [],
 }
-
-export const dismissAlert = createAction<number>('tk-alerts/dismiss');
-export const addAlert = createAction<ErrorAlert>('tk-alerts/addAlert');
-
-export const selectAlerts = (state:RootState) => state.alerts.list;
 
 const alertsReducer = createReducer(initialAlertsState, (builder) => {
     builder

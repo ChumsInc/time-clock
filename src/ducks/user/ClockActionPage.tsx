@@ -8,19 +8,20 @@ import CountdownTimer from "./CountdownTimer";
 import EmployeeName from "./EmployeeName";
 import ActionTimeAlert from "./ActionTimeAlert";
 import {
-    clearUserAction,
-    performClockAction,
     selectEntryAlert,
-    selectRequiresOverride,
+    selectRequiresOverride, selectUserActionStatus,
     selectUserCode,
     selectUserEntry
-} from "./index";
+} from "./selectors";
 import './clock-action-page.scss';
 import './info-container.scss';
 import BlockButton from "../../components/BlockButton";
+import {useAppDispatch} from "../../app/configureStore";
+import {clearUser, performClockAction} from "./actions";
 
 const ClockActionPage: React.FC = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
+    const actionStatus = useSelector(selectUserActionStatus);
     const code = useSelector(selectUserCode);
     const entry = useSelector(selectUserEntry);
     const entryAlert = useSelector(selectEntryAlert);
@@ -29,7 +30,7 @@ const ClockActionPage: React.FC = () => {
     const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        dispatch(clearUserAction());
+        dispatch(clearUser());
         inputRef.current?.focus();
     }, [])
 
@@ -45,7 +46,8 @@ const ClockActionPage: React.FC = () => {
             return;
         }
         setCurrentAction(CLOCK_ACTION_CLOCK_IN);
-        dispatch(performClockAction(CLOCK_ACTION_CLOCK_IN, requiresOverride));
+
+        dispatch(performClockAction({action: 'clock-in', code, userOverride: false}));
     }
     const onClockOut = () => {
         if (!code) {
@@ -57,7 +59,7 @@ const ClockActionPage: React.FC = () => {
     }
     const onCancel = () => {
         setCurrentAction('');
-        dispatch(clearUserAction());
+        dispatch(clearUser());
     }
 
     const onSubmitDoNothing = (ev: FormEvent) => ev.preventDefault();
@@ -82,10 +84,10 @@ const ClockActionPage: React.FC = () => {
             {!requiresOverride && entry && (
                 <Fragment>
                     {entry.isClockedIn && (
-                        <ActionTimeAlert time={entry.clockInTime} message="You clocked in" color="success"/>
+                        <ActionTimeAlert time={entry.clockInTime} message="You clocked in" severity="success"/>
                     )}
                     {!entry.isClockedIn && !!entry.clockOutTime && (
-                        <ActionTimeAlert time={entry.clockOutTime} message="You clocked out" color="success"/>
+                        <ActionTimeAlert time={entry.clockOutTime} message="You clocked out" severity="success"/>
                     )}
                     <CountdownTimer startOffset={2000} rate={300} onComplete={onCancel}/>
                     <BlockButton color="primary" type="button" onClick={onCancel}>

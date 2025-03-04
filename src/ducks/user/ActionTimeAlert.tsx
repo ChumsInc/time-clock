@@ -1,14 +1,13 @@
 import React from 'react';
-import {Alert, BootstrapColor} from "chums-ducks";
+import Alert, {AlertProps} from "@mui/material/Alert";
 
-export interface ActionTimeAlertProps {
-    color: BootstrapColor,
+export interface ActionTimeAlertProps extends AlertProps {
     message: string,
     time: number,
 }
-const ActionTimeAlert:React.FC<ActionTimeAlertProps> = ({color, message, time}) => {
+const ActionTimeAlert = ({severity, message, time, ...rest}:ActionTimeAlertProps) => {
     return (
-        <Alert color={color}>
+        <Alert severity={severity} {...rest}>
             {message} at {new Date(time * 1000).toLocaleString()}
         </Alert>
     );

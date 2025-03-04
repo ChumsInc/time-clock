@@ -2,7 +2,18 @@ import React from 'react';
 import classNames from 'classnames';
 import {CLOCK_IMAGE_URL} from "../../constants";
 import {BannerImage} from "../../types";
+import styled from '@emotion/styled';
 
+const CarouselItem = styled.div`
+    .next,
+    .prev,
+    .active {
+        display: flex;
+    }
+    align-items: center;
+    justify-content: space-around;
+    height: 100%;
+`
 
 export interface BannerItemProps {
     banner: BannerImage,
@@ -14,17 +25,16 @@ const BannerItem:React.FC<BannerItemProps> = ({banner, active}) => {
     const bgImgUrl = !!filename ? `url(${imgUrl})` : undefined;
 
     const className = {
-        'carousel-item': true,
         'active': active,
         'hasOverlay': !!overlay,
         'banner-image': !!filename,
     }
     return (
-        <div className={classNames(className)} style={{backgroundImage: bgImgUrl}}>
+        <CarouselItem className={classNames(className)} style={{backgroundImage: bgImgUrl}}>
             {!!overlay && (
                 <div className="carousel-caption" dangerouslySetInnerHTML={{__html: overlay}} />
             )}
-        </div>
+        </CarouselItem>
     );
 };
 

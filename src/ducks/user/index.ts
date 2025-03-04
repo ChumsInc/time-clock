@@ -1,45 +1,27 @@
 import {combineReducers} from "redux";
 import {CLOCK_ACTION_URL} from "../../constants";
 import {ActionInterface, ActionPayload, fetchJSON, tabSelected} from "chums-ducks";
-import {Employee, PayPeriod, PayPeriodEntry, UserInfoResponse} from "../../types";
+import {ClockAction, Employee, PayPeriod, PayPeriodEntry} from "../../types";
 import {ThunkAction} from "redux-thunk";
 import {RootState} from "../index";
-import {createAction, createAsyncThunk, createReducer} from "@reduxjs/toolkit";
-import {fetchUserInfo} from "../../api/user";
-
-export interface UserPayload extends ActionPayload {
-    code?: string,
-    employee?: Employee,
-    entry?: PayPeriodEntry,
-    alert?: string,
-    requiresOverride?: boolean,
-    overrideText?: string,
-    success?: boolean,
-    periods?: PayPeriod[],
-    id?: string,
-    isClockedIn?: boolean,
-}
-
-export interface UserAction extends ActionInterface {
-    payload?: UserPayload,
-}
-
-export interface UserThunkAction extends ThunkAction<any, RootState, unknown, UserAction> {
-}
+import {createReducer} from "@reduxjs/toolkit";
+import {clearUser, loadUserInfo, performClockAction, setLoginCode} from "./actions";
 
 export interface UserState {
+    actionStatus: ClockAction | 'pending' | 'idle';
     code: string;
-    employee: Employee|null;
-    entry:PayPeriodEntry|null;
-    entryAlert: string|null;
+    employee: Employee | null;
+    entry: PayPeriodEntry | null;
+    entryAlert: string | null;
     requiresOverride: boolean;
-    overrideText: string|null;
+    overrideText: string | null;
     clockActionFailed: boolean;
-    isClockedIn: boolean|null;
+    isClockedIn: boolean | null;
     loading: boolean;
 }
 
-export const initialUserState:UserState = {
+export const initialUserState: UserState = {
+    actionStatus: 'idle',
     code: '',
     employee: null,
     entry: null,
@@ -50,7 +32,6 @@ export const initialUserState:UserState = {
     isClockedIn: false,
     loading: false,
 }
-
 
 
 export const userSetLoginCode = 'user/setLoginCode';
@@ -70,81 +51,15 @@ export const userClearUser = 'user/clearUser';
 
 export const selectUserCode = (state: RootState): string => state.user.code;
 export const selectUserLoading = (state: RootState): boolean => state.user.loading;
-export const selectEmployee = (state: RootState): Employee|null => state.user.employee;
-export const selectUserEntry = (state:RootState):PayPeriodEntry|null => state.user.entry;
-export const selectEntryAlert = (state:RootState):string|null => state.user.entryAlert;
-export const selectRequiresOverride = (state:RootState): boolean => state.user.requiresOverride;
-export const selectOverrideText = (state:RootState):string|null => state.user.overrideText;
-export const selectClockActionFailed = (state:RootState):boolean => state.user.clockActionFailed;
-export const selectIsClockedIn = (state:RootState):boolean => state.user.isClockedIn;
-
-export const setLoginCode = createAction<string>('user/setLoginCode');
-export const clearUser = createAction('user/clearUser');
-export const loadUserInfo = createAsyncThunk<UserInfoResponse|null, number>(
-    'user/loadInfo',
-    async (arg, {getState}) => {
-        const state = getState() as RootState;
-        const code = selectUserCode(state);
-        return await fetchUserInfo({idPayPeriod: arg, code});
-    },
-    {
-        condition: (arg, {getState}) => {
-            const state = getState() as RootState;
-            return !!arg && !!selectUserCode(state);
-        }
-    }
-)
+export const selectEmployee = (state: RootState): Employee | null => state.user.employee;
+export const selectUserEntry = (state: RootState): PayPeriodEntry | null => state.user.entry;
+export const selectEntryAlert = (state: RootState): string | null => state.user.entryAlert;
+export const selectRequiresOverride = (state: RootState): boolean => state.user.requiresOverride;
+export const selectOverrideText = (state: RootState): string | null => state.user.overrideText;
+export const selectClockActionFailed = (state: RootState): boolean => state.user.clockActionFailed;
+export const selectIsClockedIn = (state: RootState): boolean => state.user.isClockedIn;
 
 export const setLoginCodeAction = (code: string): UserAction => ({type: userSetLoginCode, payload: {code}});
-
-export const performClockAction = (action: string, override: boolean = false): UserThunkAction =>
-    async (dispatch, getState) => {
-        try {
-            const state = getState();
-            if (selectUserLoading(state)) {
-                return;
-            }
-            const code = selectUserCode(state);
-            const body = {action, 'user-override': override ? 1 : 0, code};
-            const res = await fetchJSON(CLOCK_ACTION_URL, {
-                method: 'POST',
-                body: JSON.stringify(body)
-            });
-            const {
-                error,
-                employee,
-                entry,
-                alert,
-                userOverride: requiresOverride,
-                buttontext: overrideText,
-                confirm,
-                success
-            } = res;
-            if (error) {
-                dispatch({
-                    type: userClockActionFailed,
-                    payload: {error: new Error(error), context: userClockActionRequested}
-                });
-            }
-            dispatch({
-                type: userClockActionSucceeded,
-                payload: {
-                    employee,
-                    entry,
-                    alert: alert || confirm,
-                    requiresOverride,
-                    overrideText,
-                    success
-                }
-            });
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                console.log("performClockAction()", error.message);
-                return dispatch({type: userClockActionFailed, payload: {error, context: userClockActionRequested}})
-            }
-            console.error("performClockAction()", error);
-        }
-    }
 
 export const clearUserAction = () => ({type: userClearUser});
 
@@ -208,155 +123,162 @@ const userReducer = createReducer(initialUserState, (builder) => {
             state.employee = action.payload?.employee ?? null;
             state.entry = action.payload?.entry ?? null;
         })
+        .addCase(performClockAction.pending, (state, action) => {
+            state.actionStatus = action.meta.arg.action;
+        })
+        .addCase(performClockAction.fulfilled, (state, action) => {
+            state.actionStatus = 'idle';
+            state.
+        })
 })
 const codeReducer = (state = '', action: UserAction) => {
     const {type, payload} = action;
     switch (type) {
-    case userSetLoginCode:
-        return payload?.code || '';
-    case userClearUser:
-        return '';
-    default:
-        return state;
+        case userSetLoginCode:
+            return payload?.code || '';
+        case userClearUser:
+            return '';
+        default:
+            return state;
     }
 };
 
 const employeeReducer = (state: Employee | null = null, action: UserAction): Employee | null => {
     const {type, payload} = action;
     switch (type) {
-    case userFetchSucceeded:
-    case userClockActionSucceeded:
-    case userApprovePeriodSucceeded:
-        if (payload?.employee) {
-            return payload.employee;
-        }
-        return state;
-    case userClearUser:
-        return null;
-    case tabSelected:
-        if (payload?.id && payload.id === 'clock') {
+        case userFetchSucceeded:
+        case userClockActionSucceeded:
+        case userApprovePeriodSucceeded:
+            if (payload?.employee) {
+                return payload.employee;
+            }
+            return state;
+        case userClearUser:
             return null;
-        }
-        return state;
-    default:
-        return state;
+        case tabSelected:
+            if (payload?.id && payload.id === 'clock') {
+                return null;
+            }
+            return state;
+        default:
+            return state;
     }
 };
 
 const entryReducer = (state: PayPeriodEntry | null = null, action: UserAction): PayPeriodEntry | null => {
     const {type, payload} = action;
     switch (type) {
-    case userClearUser:
-        return null;
-    case userClockActionSucceeded:
-        if (payload?.entry) {
-            return {...payload.entry};
-        }
-        return null;
-    case userFetchSucceeded:
-        if (payload?.entry) {
-            return {...payload.entry};
-        }
-        return null;
-    case tabSelected:
-        if (payload?.id && payload.id === 'clock') {
+        case userClearUser:
             return null;
-        }
-        return state;
-    default:
-        return state;
+        case userClockActionSucceeded:
+            if (payload?.entry) {
+                return {...payload.entry};
+            }
+            return null;
+        case userFetchSucceeded:
+            if (payload?.entry) {
+                return {...payload.entry};
+            }
+            return null;
+        case tabSelected:
+            if (payload?.id && payload.id === 'clock') {
+                return null;
+            }
+            return state;
+        default:
+            return state;
     }
 };
 
 const entryAlertReducer = (state: string | null = null, action: UserAction): string | null => {
     const {type, payload} = action;
     switch (type) {
-    case userClockActionSucceeded:
-        return payload?.alert || null;
-    case userClearUser:
-        return null;
-    default:
-        return state;
+        case userClockActionSucceeded:
+            return payload?.alert || null;
+        case userClearUser:
+            return null;
+        default:
+            return state;
     }
 };
 
 const requiresOverrideReducer = (state: boolean = false, action: UserAction): boolean => {
     const {type, payload} = action;
     switch (type) {
-    case userClockActionSucceeded:
-        return payload?.requiresOverride || false;
-    case userClearUser:
-        return false;
-    default:
-        return state;
+        case userClockActionSucceeded:
+            return payload?.requiresOverride || false;
+        case userClearUser:
+            return false;
+        default:
+            return state;
     }
 };
 
 const overrideTextReducer = (state: string | null = null, action: UserAction): string | null => {
     const {type, payload} = action;
     switch (type) {
-    case userClockActionSucceeded:
-        return payload?.overrideText || null;
-    case userClearUser:
-        return null;
-    default:
-        return state;
+        case userClockActionSucceeded:
+            return payload?.overrideText || null;
+        case userClearUser:
+            return null;
+        default:
+            return state;
     }
 };
 
 const clockActionFailedReducer = (state = false, action: UserAction): boolean => {
     const {type, payload} = action;
     switch (type) {
-    case userClockActionSucceeded:
-        return payload?.success === false;
-    case userClearUser:
-        return false;
-    default:
-        return state;
+        case userClockActionSucceeded:
+            return payload?.success === false;
+        case userClearUser:
+            return false;
+        default:
+            return state;
     }
 };
 
 const isClockedInReducer = (state = null, action: UserAction): boolean | null => {
     const {type, payload} = action;
     switch (type) {
-    case userClockActionSucceeded:
-        return payload?.isClockedIn === true;
-    case userClearUser:
-        return null;
-    default:
-        return state;
+        case userClockActionSucceeded:
+            return payload?.isClockedIn === true;
+        case userClearUser:
+            return null;
+        default:
+            return state;
     }
 };
 
 const loadingReducer = (state: boolean = false, action: UserAction): boolean => {
     const {type} = action;
     switch (type) {
-    case userClockActionRequested:
-    case userFetchRequested:
-    case userApprovePeriodRequested:
-        return true;
-    case userClockActionSucceeded:
-    case userFetchSucceeded:
-    case userApprovePeriodSucceeded:
-    case userClockActionFailed:
-    case userFetchFailed:
-    case userApprovePeriodFailed:
-    case userClearUser:
-        return false;
-    default:
-        return state;
+        case userClockActionRequested:
+        case userFetchRequested:
+        case userApprovePeriodRequested:
+            return true;
+        case userClockActionSucceeded:
+        case userFetchSucceeded:
+        case userApprovePeriodSucceeded:
+        case userClockActionFailed:
+        case userFetchFailed:
+        case userApprovePeriodFailed:
+        case userClearUser:
+            return false;
+        default:
+            return state;
     }
 };
 
-
-export default combineReducers({
-    code: codeReducer,
-    employee: employeeReducer,
-    entry: entryReducer,
-    entryAlert: entryAlertReducer,
-    requiresOverride: requiresOverrideReducer,
-    overrideText: overrideTextReducer,
-    clockActionFailed: clockActionFailedReducer,
-    isClockedIn: isClockedInReducer,
-    loading: loadingReducer,
-})
+export default userReducer;
+// export default combineReducers({
+//     code: codeReducer,
+//     employee: employeeReducer,
+//     entry: entryReducer,
+//     entryAlert: entryAlertReducer,
+//     requiresOverride: requiresOverrideReducer,
+//     overrideText: overrideTextReducer,
+//     clockActionFailed: clockActionFailedReducer,
+//     isClockedIn: isClockedInReducer,
+//     loading: loadingReducer,
+// })
