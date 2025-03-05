@@ -1,86 +1,81 @@
-import {combineReducers} from "redux";
-import {ActionInterface, ActionPayload, fetchJSON} from "chums-ducks";
-import {ThunkAction} from "redux-thunk";
-import {RootState} from "../index";
-import {API_PATH_VERSION} from "../../constants";
-import {BannerAction} from "../banners";
+import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {fetchJSON} from "@chumsinc/ui-utils";
+import {RootState} from "@/app/configureStore";
 
-export interface VersionPayload extends ActionPayload {
-    version?: string,
+export interface VersionState {
+    status: 'idle' | 'loading',
+    version: string | null;
+    available: string | null;
 }
 
-export interface VersionAction extends ActionInterface {
-    payload?: VersionPayload,
+const initialState: VersionState = {
+    status: 'idle',
+    version: null,
+    available: null,
+}
+const versionSlice = createSlice({
+    name: "version",
+    initialState: initialState,
+    reducers: {},
+    extraReducers: (builder) => {
+        builder
+            .addCase(loadVersion.pending, (state, action) => {
+                state.status = 'loading';
+            })
+            .addCase(loadVersion.fulfilled, (state, action) => {
+                state.status = 'idle';
+                if (action.payload) {
+                    if (!state.version) {
+                        state.version = action.payload;
+                    }
+                    state.available = action.payload;
+                }
+            })
+            .addCase(loadVersion.rejected, (state) => {
+                state.status = 'idle';
+            })
+    },
+    selectors: {
+        selectVersion: (state) => state.version,
+        selectNextVersion: (state) => state.available,
+        selectUpdateAvailable: (state) => !!state.version && state.available !== state.version,
+        selectVersionStatus: (state) => state.status,
+    }
+});
+
+export const {selectNextVersion, selectVersionStatus, selectVersion, selectUpdateAvailable} = versionSlice.selectors;
+
+interface FetchVersionResponse {
+    name: string;
+    version: string;
 }
 
-export interface VersionThunkAction extends ThunkAction<any, RootState, unknown, VersionAction> {
+async function fetchVersion(): Promise<string | null> {
+    try {
+        const url = './package.json';
+        const res = await fetchJSON<FetchVersionResponse>(url, {cache: 'no-cache'});
+        return res?.version ?? null;
+    } catch (err: unknown) {
+        if (err instanceof Error) {
+            console.debug("fetchVersion()", err.message);
+            return Promise.reject(err);
+        }
+        console.debug("fetchVersion()", err);
+        return Promise.reject(new Error('Error in fetchVersion()'));
+    }
 }
 
-export const versionFetchRequested = 'version/fetchRequested';
-export const versionFetchSucceeded = 'version/fetchSucceeded';
-export const versionFetchFailed = 'version/fetchFailed';
-
-export const selectVersion = (state:RootState):string => state.version.current;
-export const selectUpdateAvailable = (state:RootState):boolean => !!state.version.current && state.version.available > state.version.current;
-export const selectVersionLoading = (state:RootState):boolean => state.version.loading;
-
-export const fetchVersionAction = (): VersionThunkAction =>
-    async (dispatch, getState) => {
-        try {
+export const loadVersion = createAsyncThunk<string | null, void, { state: RootState }>(
+    'version/load',
+    async () => {
+        return await fetchVersion();
+    },
+    {
+        condition: (arg, {getState}) => {
             const state = getState();
-            if (selectVersionLoading(state)) {
-                return;
-            }
-            dispatch({type: versionFetchRequested});
-            const {version} = await fetchJSON(API_PATH_VERSION, {cache: 'no-cache'});
-            dispatch({type: versionFetchSucceeded, payload: {version}});
-        } catch (error: unknown) {
-            if (error instanceof Error) {
-                console.log("fetchVersionAction()", error.message);
-                return dispatch({type: versionFetchFailed})
-            }
-            console.error("fetchVersionAction()", error);
+            return selectVersionStatus(state) === 'idle';
         }
     }
+)
 
-const currentReducer = (state: string = '', action: VersionAction): string => {
-    switch (action.type) {
-    case versionFetchSucceeded:
-        if (action.payload?.version && !state) {
-            return action.payload.version;
-        }
-        return state;
-    default:
-        return state;
-    }
-}
-
-const availableReducer = (state: string = '', action: VersionAction): string => {
-    switch (action.type) {
-    case versionFetchSucceeded:
-        if (action.payload?.version) {
-            return action.payload.version;
-        }
-        return state;
-    default:
-        return state;
-    }
-}
-
-const loadingReducer = (state: boolean = false, action: BannerAction): boolean => {
-    switch (action.type) {
-    case versionFetchRequested:
-        return true;
-    case versionFetchSucceeded:
-    case versionFetchFailed:
-        return false;
-    default:
-        return state;
-    }
-}
-
-export default combineReducers({
-    current: currentReducer,
-    available: availableReducer,
-    loading: loadingReducer,
-})
+export default versionSlice;

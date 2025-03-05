@@ -1,26 +1,33 @@
-import React, {MouseEvent, useEffect, useState} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
-import {fetchVersionAction, selectUpdateAvailable, selectVersion, selectVersionLoading} from "./index";
-import {Alert} from "chums-ducks";
+import React, {MouseEvent, useEffect, useRef, useState} from 'react';
+import {useSelector} from 'react-redux';
+import {loadVersion, selectNextVersion, selectUpdateAvailable, selectVersion, selectVersionStatus} from "./index";
+import {Alert, Button} from "react-bootstrap";
+import {useAppDispatch} from "@/app/configureStore";
+import styled from "@emotion/styled";
+
+const AlertContainer = styled.div`
+    cursor: pointer;
+`
 
 const updateCheckInterval = 30 * 60 * 1000;
 
-const AppVersion: React.FC = () => {
-    const dispatch = useDispatch();
+export default function AppVersion() {
+    const dispatch = useAppDispatch();
     const version = useSelector(selectVersion);
     const updateAvailable = useSelector(selectUpdateAvailable);
-    const loading = useSelector(selectVersionLoading);
-    const [timer, setTimer] = useState(0);
+    const nextVersion = useSelector(selectNextVersion);
+    const status = useSelector(selectVersionStatus);
+    const intervalRef = useRef<number>(0);
+    const [ignored, setIgnored] = useState<string | null>(null);
 
     useEffect(() => {
-        dispatch(fetchVersionAction());
-        const timerHandle = window.setInterval(() => {
-            dispatch(fetchVersionAction());
+        dispatch(loadVersion());
+        intervalRef.current = window.setInterval(() => {
+            dispatch(loadVersion());
         }, updateCheckInterval);
-        setTimer(timerHandle);
 
         return () => {
-            window.clearInterval(timer);
+            window.clearInterval(intervalRef.current);
         }
     }, []);
 
@@ -32,19 +39,22 @@ const AppVersion: React.FC = () => {
         }
     }
 
-    const onCheckVersion = () => dispatch(fetchVersionAction());
+    const onCheckVersion = () => dispatch(loadVersion());
 
+    const onDismissUpdate = () => {
+        setIgnored(nextVersion);
+    }
 
     return (
         <div>
-            <span onClick={onCheckVersion}
-                  className="app__version">Version: {version || (loading ? 'loading' : '')}</span>
-            {updateAvailable && (
-                <div onClick={onClickUpdate} className="app__version-popup">
-                    <Alert color="info" title="Update Available">Click Here to refresh</Alert>
-                </div>
+            <Button variant="link" onClick={onCheckVersion}>Version: {version ?? status}</Button>
+            {updateAvailable && (!ignored || ignored !== nextVersion) && (
+                <AlertContainer onClick={onClickUpdate} tabIndex={0}>
+                    <Alert variant="warning" aria-label="Update Available" dismissible onClose={onDismissUpdate}>
+                        Click Here to refresh
+                    </Alert>
+                </AlertContainer>
             )}
         </div>
     );
 }
-export default AppVersion

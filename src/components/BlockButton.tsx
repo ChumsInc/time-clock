@@ -1,28 +1,34 @@
 import React, {ButtonHTMLAttributes} from 'react';
 import classNames from 'classnames';
+import styled from "@emotion/styled";
+import {Button, ButtonProps} from "react-bootstrap";
 
-export interface BlockButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+
+const Block = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    button {
+        flex: 0 0 100%;
+    }
+`
+export interface BlockButtonProps extends ButtonProps {
     containerClassName?: string,
 }
 
-const BlockButton: React.FC<BlockButtonProps> =
-    ({
-         className = '',
-         containerClassName = '',
-         type = 'button',
-         onClick,
-         children,
-         ...rest
-     }) => {
-        return (
-            <div className={classNames("d-grid col-9 mx-auto tc__done-button", containerClassName)}>
-                <button type={type} className={classNames("btn", className, {'btn-primary': !className})}
-                        {...rest}
-                        onClick={onClick}>
-                    {children}
-                </button>
-            </div>
-        );
-    };
+const BlockButton = ({
+                         containerClassName = '',
+                         onClick,
+                         children,
+                         ...rest
+                     }: BlockButtonProps) => {
+    return (
+        <Block className={containerClassName}>
+            <Button onClick={onClick} {...rest}>
+                {children}
+            </Button>
+        </Block>
+    );
+};
 
 export default BlockButton;

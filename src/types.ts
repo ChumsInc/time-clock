@@ -1,11 +1,3 @@
-export interface BannerImage {
-    id: number,
-    filename: string,
-    overlay: string|null,
-    active: boolean,
-    timestamp: string,
-}
-
 export interface PayPeriodWeek {
     start: number,
     end: number,
@@ -14,7 +6,8 @@ export interface PayPeriodWeek {
     worked: number,
     overtime: number,
 }
-export interface PayPeriod {
+
+export interface PHP_PayPeriod {
     id: number,
     StartDate: number,
     Week2Start: number,
@@ -91,8 +84,8 @@ export interface Employee {
     errorInfo: string|null,
     hsaEmployeeKey: string|null,
     entries: PayPeriodEntry[],
-    deletedEntries: PayPeriodEntry[],
-    payPeriod: PayPeriod
+    deleted_entries: PayPeriodEntry[],
+    payPeriod: PHP_PayPeriod
 }
 
 
