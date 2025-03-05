@@ -2,5 +2,6 @@
 /public/.sass-cache/
 /public/js/*.js
 /public/js/*.map
+/public/js/manifest.json
 /.idea/
 /dist
