@@ -2,15 +2,6 @@ import React, {useEffect, useState} from 'react';
 import {ProgressBar} from "react-bootstrap";
 import {Variant} from "react-bootstrap/types";
 
-const calcBarClassName = (pct: number) => ({
-    'progress-bar': true,
-    'bg-success': pct > 0.75,
-    'bg-info': pct > 0.50 && pct <= 0.75,
-    'bg-warning': pct > 0.25 && pct <= 0.50,
-    'bg-danger': pct > 0.10 && pct <= 0.25,
-    'bg-dark': pct <= 0.10,
-});
-
 const calcVariant = (pct: number): Variant => {
     if (pct > 0.75) {
         return 'success';
