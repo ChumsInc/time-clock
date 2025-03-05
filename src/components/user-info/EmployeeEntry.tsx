@@ -1,13 +1,12 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import Time from "./Time";
 import {selectUserCode, selectUserEntry, selectUserLoading} from "@/ducks/user";
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {getUserInfo} from "@/ducks/user/actions";
-import {UserInfoSection} from "@/components/user-info/UserInfoSection";
-import {Accordion, AccordionItemProps, Alert} from "react-bootstrap";
+import {Accordion, Alert} from "react-bootstrap";
 
-const EmployeeEntry = ({eventKey}:{eventKey:string}) => {
+const EmployeeEntry = ({eventKey}: { eventKey: string }) => {
     const dispatch = useAppDispatch();
     const code = useAppSelector(selectUserCode);
     const entry = useSelector(selectUserEntry);
@@ -22,7 +21,7 @@ const EmployeeEntry = ({eventKey}:{eventKey:string}) => {
     const clockInDate = !!entry?.EntryDate ? new Date(entry.EntryDate * 1000).toLocaleDateString() : null;
     const clockInTime = !!entry?.clockInTime ? new Date(entry.EntryDate * 1000).toLocaleTimeString() : 'missing';
     const clockOutDate = !!entry?.clockOutTime ? new Date(entry.clockOutTime * 1000).toLocaleDateString() : null;
-    const clockOutTime = !!entry?.clockOutTime ? new Date(entry.clockOutTime * 1000).toLocaleTimeString() : (!!entry?.clockInTime ? 'clocked in' :'n/a');
+    const clockOutTime = !!entry?.clockOutTime ? new Date(entry.clockOutTime * 1000).toLocaleTimeString() : (!!entry?.clockInTime ? 'clocked in' : 'n/a');
 
     return (
         <Accordion.Item eventKey={eventKey}>

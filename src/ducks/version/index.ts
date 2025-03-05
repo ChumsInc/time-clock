@@ -19,7 +19,7 @@ const versionSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(loadVersion.pending, (state, action) => {
+            .addCase(loadVersion.pending, (state) => {
                 state.status = 'loading';
             })
             .addCase(loadVersion.fulfilled, (state, action) => {

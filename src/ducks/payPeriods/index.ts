@@ -37,7 +37,7 @@ const payPeriodsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder
-            .addCase(clearUser, (state, action) => {
+            .addCase(clearUser, (state) => {
                 payPeriodsAdapter.removeAll(state);
                 state.hireDate = null;
             })

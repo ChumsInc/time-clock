@@ -3,10 +3,9 @@ import {useSelector} from 'react-redux';
 import Time from "./Time";
 import classNames from 'classnames';
 import {selectEmployee} from "@/ducks/user";
-import {UserInfoSection} from "@/components/user-info/UserInfoSection";
 import {Accordion} from "react-bootstrap";
 
-const EmployeePlSummary = ({eventKey}:{eventKey:string}) => {
+const EmployeePlSummary = ({eventKey}: { eventKey: string }) => {
     const employee = useSelector(selectEmployee);
     if (!employee) {
         return null;

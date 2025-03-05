@@ -2,24 +2,22 @@ import React from 'react';
 import {useSelector} from 'react-redux';
 import Time from "./Time";
 import classNames from 'classnames';
-import {ENTRY_BEREAVJURY, ENTRY_FMLA100, ENTRY_FMLA67, ENTRY_HOLIDAY, ENTRY_PL} from "../../types";
+import {ENTRY_BEREAVJURY, ENTRY_FMLA100, ENTRY_FMLA67, ENTRY_HOLIDAY, ENTRY_PL, PayPeriodEntry} from "../../types";
 import EntryType from "./EntryType";
 import DateRange, {dateRange} from "../DateRange";
 import {selectEmployee, selectEmployeePayPeriod} from "@/ducks/user";
-import {PayPeriodEntry} from "../../types";
 import {useAppSelector} from "@/app/configureStore";
 import {selectEntries} from "@/ducks/entries";
-import {UserInfoSection} from "@/components/user-info/UserInfoSection";
 import {Accordion} from "react-bootstrap";
 
-const filterSpecialEntries = (entry:PayPeriodEntry) => [
+const filterSpecialEntries = (entry: PayPeriodEntry) => [
     ENTRY_HOLIDAY,
     ENTRY_PL,
     ENTRY_BEREAVJURY,
     ENTRY_FMLA67,
     ENTRY_FMLA100].includes(entry.idEntryType);
 
-const EmployeePayPeriodSummary = ({eventKey}:{eventKey:string}) => {
+const EmployeePayPeriodSummary = ({eventKey}: { eventKey: string }) => {
     const employee = useSelector(selectEmployee);
     const payPeriod = useAppSelector(selectEmployeePayPeriod);
     const entries = useAppSelector(selectEntries);
@@ -27,8 +25,6 @@ const EmployeePayPeriodSummary = ({eventKey}:{eventKey:string}) => {
     if (!employee || !payPeriod) {
         return null;
     }
-
-    const {StartDate, EndDate, weeks} = payPeriod;
 
     return (
         <Accordion.Item eventKey={eventKey}>
@@ -47,10 +43,10 @@ const EmployeePayPeriodSummary = ({eventKey}:{eventKey:string}) => {
                     </tr>
                     </thead>
                     <tbody>
-                    {weeks.map((week, index) => (
+                    {payPeriod.weeks.map((week, index) => (
                         <tr key={week.start} className={classNames({'table-danger': !!week.errors})}>
                             <th>{index + 1}</th>
-                            <td><DateRange start={week.start} end={week.end} /></td>
+                            <td><DateRange start={week.start} end={week.end}/></td>
                             <td className="right">
                                 <Time seconds={week.duration}/>
                             </td>
@@ -62,9 +58,9 @@ const EmployeePayPeriodSummary = ({eventKey}:{eventKey:string}) => {
                     <tr>
                         <th colSpan={2}>Total</th>
                         <td className="right">
-                            <Time seconds={weeks[0].duration + weeks[1].duration}/>
+                            <Time seconds={payPeriod.weeks[0].duration + payPeriod.weeks[1].duration}/>
                         </td>
-                        <td className="right"><Time seconds={weeks[0].overtime + weeks[1].overtime}/></td>
+                        <td className="right"><Time seconds={payPeriod.weeks[0].overtime + payPeriod.weeks[1].overtime}/></td>
                     </tr>
                     </tfoot>
                 </table>

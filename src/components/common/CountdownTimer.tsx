@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import classNames from 'classnames';
 import {ProgressBar} from "react-bootstrap";
 import {Variant} from "react-bootstrap/types";
 
-const calcBarClassName = (pct:number) => ({
+const calcBarClassName = (pct: number) => ({
     'progress-bar': true,
     'bg-success': pct > 0.75,
     'bg-info': pct > 0.50 && pct <= 0.75,
@@ -12,7 +11,7 @@ const calcBarClassName = (pct:number) => ({
     'bg-dark': pct <= 0.10,
 });
 
-const calcVariant = (pct:number):Variant => {
+const calcVariant = (pct: number): Variant => {
     if (pct > 0.75) {
         return 'success';
     }
@@ -32,53 +31,53 @@ export interface CountdownTimerProps {
     onComplete: () => void,
 }
 
-const CountdownTimer = ({startOffset = 0, duration = 100, rate = 100, onComplete}:CountdownTimerProps) => {
-        const [offsetTimeout, setOffsetTimeout] = useState(0);
-        const [interval, setInterval] = useState(0);
+const CountdownTimer = ({startOffset = 0, duration = 100, rate = 100, onComplete}: CountdownTimerProps) => {
+    const [offsetTimeout, setOffsetTimeout] = useState(0);
+    const [interval, setInterval] = useState(0);
 
-        const [remaining, setRemaining] = useState(duration);
+    const [remaining, setRemaining] = useState(duration);
 
-        useEffect(() => {
+    useEffect(() => {
+        window.clearTimeout(offsetTimeout);
+        window.clearInterval(interval);
+        if (startOffset > 50) {
+            const timeout = window.setTimeout(startTimer, startOffset);
+            setOffsetTimeout(timeout)
+        } else {
+            startTimer();
+        }
+        return function () {
+            window.clearInterval(interval);
+            window.clearTimeout(offsetTimeout);
+        }
+    }, []);
+
+    useEffect(() => {
+        if (remaining <= 0) {
             window.clearTimeout(offsetTimeout);
             window.clearInterval(interval);
-            if (startOffset > 50) {
-                const timeout = window.setTimeout(startTimer, startOffset);
-                setOffsetTimeout(timeout)
-            } else {
-                startTimer();
-            }
-            return function () {
-                window.clearInterval(interval);
-                window.clearTimeout(offsetTimeout);
-            }
-        }, []);
-
-        useEffect(() => {
-            if (remaining <= 0) {
-                window.clearTimeout(offsetTimeout);
-                window.clearInterval(interval);
-                onComplete();
-            }
-        }, [remaining])
-
-        const startTimer = () => {
-            setRemaining(duration);
-            const intervalHandler = window.setInterval(() => {
-                setRemaining(remaining => remaining - 1);
-            }, rate);
-            setInterval(intervalHandler);
+            onComplete();
         }
+    }, [remaining])
 
-
-        if (!duration || !remaining) {
-            return null;
-        }
-        const pct = remaining / duration;
-        const barClassName = calcBarClassName(pct);
-        const barWidth = `${pct * 100}%`
-        return (
-            <ProgressBar variant={calcVariant(pct)} now={pct * 100} className="my-3"></ProgressBar>
-        )
+    const startTimer = () => {
+        setRemaining(duration);
+        const intervalHandler = window.setInterval(() => {
+            setRemaining(remaining => remaining - 1);
+        }, rate);
+        setInterval(intervalHandler);
     }
+
+
+    if (!duration || !remaining) {
+        return null;
+    }
+    const pct = remaining / duration;
+    const barClassName = calcBarClassName(pct);
+    const barWidth = `${pct * 100}%`
+    return (
+        <ProgressBar variant={calcVariant(pct)} now={pct * 100} className="my-3"></ProgressBar>
+    )
+}
 
 export default CountdownTimer;

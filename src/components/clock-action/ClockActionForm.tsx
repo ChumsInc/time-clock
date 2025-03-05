@@ -54,8 +54,6 @@ const ClockActionForm = () => {
         dispatch(clearUser());
     }
 
-    const onSubmitDoNothing = (ev: FormEvent) => ev.preventDefault();
-
     return (
         <div>
             <CurrentDateTime/>

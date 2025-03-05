@@ -4,7 +4,6 @@ import LoginInput from "../common/LoginInput";
 import CountdownTimer from "../common/CountdownTimer";
 import LogInIcon from "./LogInIcon";
 import CancelIcon from "../common/CancelIcon";
-import styled from "@emotion/styled";
 import {Button} from "react-bootstrap";
 import {ClockButtons} from "@/components/common/ClockButtons";
 

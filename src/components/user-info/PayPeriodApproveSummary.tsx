@@ -40,33 +40,23 @@ const PayPeriodApproveSummary = ({eventKey}: { eventKey: string }) => {
         return null;
     }
 
-    const {
-        weeks,
-        id,
-        approved,
-        approvedByName,
-        approvalTime,
-        employeeApproved,
-        employeeApprovalTime
-    } = payPeriod;
-
 
     const onApprove = (ev: FormEvent) => {
         ev.preventDefault();
-        if (employeeApproved) {
+        if (payPeriod.employeeApproved) {
             return;
         }
         dispatch(approvePayPeriod({code, idEmployee: employee.id, idPayPeriod: payPeriod.id}));
     }
 
 
-    const hasErrors = weeks[0].errors + weeks[1].errors > 0;
+    const hasErrors = payPeriod.weeks[0].errors + payPeriod.weeks[1].errors > 0;
     const plTotal = entries.filter(entry => entry.idEntryType === ENTRY_PL).reduce((acc, entry) => acc + entry.Duration, 0);
     const isClockedIn = entries.reduce((acc, entry) => acc || entry.isClockedIn, false);
 
-    const w1ClassName = classNames({'bg-danger': !!weeks[0].errors, 'text-bg-danger': !!weeks[0].errors});
-    const w2ClassName = classNames({'bg-danger': !!weeks[1].errors, 'text-bg-danger': !!weeks[1].errors});
-    const otClassName = classNames({'text-secondary': weeks[0].overtime + weeks[1].overtime === 0})
+    const w1ClassName = classNames({'bg-danger': !!payPeriod.weeks[0].errors, 'text-bg-danger': !!payPeriod.weeks[0].errors});
+    const w2ClassName = classNames({'bg-danger': !!payPeriod.weeks[1].errors, 'text-bg-danger': !!payPeriod.weeks[1].errors});
+    const otClassName = classNames({'text-secondary': payPeriod.weeks[0].overtime + payPeriod.weeks[1].overtime === 0})
     const plClassName = classNames({'text-secondary': plTotal === 0});
 
     return (
@@ -76,14 +66,14 @@ const PayPeriodApproveSummary = ({eventKey}: { eventKey: string }) => {
             </Accordion.Header>
             <Accordion.Body>
                 <ApprovalForm className="mb-3">
-                    <TimeField label="Week 1" className={w1ClassName} seconds={weeks[0].duration}/>
-                    <TimeField label="Week 2" className={w2ClassName} seconds={weeks[1].duration}/>
+                    <TimeField label="Week 1" className={w1ClassName} seconds={payPeriod.weeks[0].duration}/>
+                    <TimeField label="Week 2" className={w2ClassName} seconds={payPeriod.weeks[1].duration}/>
                     <TimeField label="Overtime" className={otClassName}
-                               seconds={weeks[0].overtime + weeks[1].overtime}/>
-                    <TimeField label="Total" seconds={weeks[0].duration + weeks[1].duration}/>
+                               seconds={payPeriod.weeks[0].overtime + payPeriod.weeks[1].overtime}/>
+                    <TimeField label="Total" seconds={payPeriod.weeks[0].duration + payPeriod.weeks[1].duration}/>
                     <TimeField label="P/L" className={plClassName} seconds={plTotal}/>
                 </ApprovalForm>
-                {!employeeApproved && !isClockedIn && (
+                {!payPeriod.employeeApproved && !isClockedIn && (
                     <BlockButton className={classNames({'btn-danger': hasErrors, 'btn-success': !hasErrors})}
                                  disabled={hasErrors}
                                  onClick={onApprove}
@@ -95,14 +85,14 @@ const PayPeriodApproveSummary = ({eventKey}: { eventKey: string }) => {
                     <Alert variant="info" title="Notice:">You are currently still clocked in for this pay
                         period.</Alert>
                 )}
-                {employeeApproved && (
+                {payPeriod.employeeApproved && (
                     <Alert title="Approved:" variant="success">You have approved this pay period
-                        at <strong>{dayjs(employeeApprovalTime).format('ddd, DD MMM YYYY @ hh:mm a')}</strong>
+                        at <strong>{dayjs(payPeriod.employeeApprovalTime).format('ddd, DD MMM YYYY @ hh:mm a')}</strong>
                     </Alert>
                 )}
-                {approved && (
-                    <Alert title="Supervisor Approved:" variant="success">{approvedByName} approved this pay period
-                        at <strong>{dayjs(approvalTime).format('ddd, DD MMM YYYY @ hh:mm a')}</strong>
+                {payPeriod.approved && (
+                    <Alert title="Supervisor Approved:" variant="success">{payPeriod.approvedByName} approved this pay period
+                        at <strong>{dayjs(payPeriod.approvalTime).format('ddd, DD MMM YYYY @ hh:mm a')}</strong>
                     </Alert>
                 )}
                 {hasErrors && (
