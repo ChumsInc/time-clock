@@ -73,8 +73,6 @@ const CountdownTimer = ({startOffset = 0, duration = 100, rate = 100, onComplete
         return null;
     }
     const pct = remaining / duration;
-    const barClassName = calcBarClassName(pct);
-    const barWidth = `${pct * 100}%`
     return (
         <ProgressBar variant={calcVariant(pct)} now={pct * 100} className="my-3"></ProgressBar>
     )
