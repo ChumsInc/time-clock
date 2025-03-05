@@ -51,16 +51,10 @@ const Time = ({
 function TimeMinutes({value}: { value: number }) {
     const hours = Math.floor(value / 3600);
     const minutes = Math.floor((value - (hours * 3600)) / 60);
-    if (hours > 0) {
-        return (
-            <span>
+    return (
+        <span>
                 {hours}:<span>{minutes.toString().padStart(2, '0')}</span>
             </span>
-        )
-    }
-
-    return (
-        <span>{minutes}</span>
     )
 }
 
