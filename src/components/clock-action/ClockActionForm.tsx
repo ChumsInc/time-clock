@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect, useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import CurrentDateTime from "../common/CurrentDateTime";
 import LoginInput from "../common/LoginInput";
@@ -6,7 +6,6 @@ import {CLOCK_ACTION_CLOCK_IN, CLOCK_ACTION_CLOCK_OUT} from "@/app/constants";
 import ClockActionButtons from "./ClockActionButtons";
 import CountdownTimer from "../common/CountdownTimer";
 import EmployeeName from "../common/EmployeeName";
-import ActionTimeAlert from "./ActionTimeAlert";
 import {clearUser, selectEntryAlert, selectRequiresOverride, selectUserCode, selectUserEntry} from "@/ducks/user";
 import BlockButton from "../BlockButton";
 import {clockAction} from "@/ducks/user/actions";
@@ -72,23 +71,17 @@ const ClockActionForm = () => {
                 <div className="my-1" dangerouslySetInnerHTML={{__html: entryAlert}}/>
             )}
             {!requiresOverride && entry && (
-                <Fragment>
-                    {entry.isClockedIn && (
-                        <ActionTimeAlert time={entry.clockInTime} message="You clocked in" color="success"/>
-                    )}
-                    {!entry.isClockedIn && !!entry.clockOutTime && (
-                        <ActionTimeAlert time={entry.clockOutTime} message="You clocked out" color="success"/>
-                    )}
+                <>
                     <CountdownTimer startOffset={2000} rate={300} onComplete={onCancel}/>
                     <BlockButton color="primary" type="button" onClick={onCancel}>
                         Done
                     </BlockButton>
-                </Fragment>
+                </>
             )}
             {requiresOverride && (
-                <Fragment>
+                <>
                     <CountdownTimer startOffset={5000} rate={300} onComplete={onCancel}/>
-                </Fragment>
+                </>
             )}
         </div>
     );

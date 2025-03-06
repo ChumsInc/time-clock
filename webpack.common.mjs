@@ -34,6 +34,7 @@ export default {
             "@/app": path.resolve(process.cwd(), 'src/app'),
             "@/components": path.resolve(process.cwd(), 'src/components'),
             "@/ducks": path.resolve(process.cwd(), 'src/ducks'),
+            "@/hooks": path.resolve(process.cwd(), 'src/hooks'),
             "@/types": path.resolve(process.cwd(), 'src/types'),
             "@/utils": path.resolve(process.cwd(), 'src/utils'),
         },

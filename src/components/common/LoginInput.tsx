@@ -19,7 +19,6 @@ const LoginInput = ({ref, inputProps}: LoginInputProps) => {
     const loading = useSelector(selectUserLoading);
     const [showCode, setShowCode] = useState(false);
     const id = inputProps?.id ?? useId();
-    // const inputRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
         ref?.current?.focus();

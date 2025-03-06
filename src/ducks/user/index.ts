@@ -43,6 +43,8 @@ const userSlice = createSlice({
                     state.isClockedIn = action.payload.entry.isClockedIn ?? false;
                     state.entry = action.payload.entry;
                     state.entryAlert = action.payload.confirm;
+                    state.overrideText = null;
+                    state.code = '';
                     return;
                 }
                 if (isClockActionRequiresOverride(action.payload)) {

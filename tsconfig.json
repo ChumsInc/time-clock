@@ -23,6 +23,7 @@
       "@/app/*": ["./app/*"],
       "@/components/*": ["./components/*"],
       "@/ducks/*": ["./ducks/*"],
+      "@/hooks/*": ["./hooks/*"],
       "@/types/*": ["./types/*"],
       "@/utils/*": ["./utils/*"]
     },

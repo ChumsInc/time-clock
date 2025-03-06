@@ -60,6 +60,7 @@
   "auto-changelog": {
     "template": "keepachangelog",
     "unreleased": true,
-    "commitLimit": false
+    "commitLimit": false,
+    "releaseSummary": true
   }
 }
