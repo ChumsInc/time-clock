@@ -1,6 +1,6 @@
 {
   "name": "time-clock",
-  "version": "2.3.3",
+  "version": "2.3.4",
   "description": "Chums Time Clock",
   "main": "index.js",
   "scripts": {
