@@ -17,7 +17,6 @@ const LoginInput = ({ref, inputProps}: LoginInputProps) => {
     const dispatch = useAppDispatch();
     const code = useSelector(selectUserCode);
     const loading = useSelector(selectUserLoading);
-    const [showCode, setShowCode] = useState(false);
     const id = inputProps?.id ?? useId();
 
     useEffect(() => {
@@ -30,7 +29,7 @@ const LoginInput = ({ref, inputProps}: LoginInputProps) => {
     return (
         <InputGroup size="lg">
             <InputGroup.Text as="label" htmlFor={id}>Login</InputGroup.Text>
-            <FormControl type={showCode ? 'text' : 'password'}
+            <FormControl type="text"
                          id={id}
                          ref={ref}
                          value={code} onChange={onChange}
@@ -39,12 +38,6 @@ const LoginInput = ({ref, inputProps}: LoginInputProps) => {
                          disabled={loading}
                          {...inputProps}
             />
-            <Button type="button" variant={showCode ? 'secondary' : 'outline-secondary'}
-                    onMouseDown={() => setShowCode(true)} onTouchStart={() => setShowCode(true)}
-                    onMouseUp={() => setShowCode(false)} onTouchCancel={() => setShowCode(false)}
-                    onTouchEnd={() => setShowCode(false)}>
-                <span className="bi-eye-fill" aria-label="View Password"/>
-            </Button>
             <Button type="reset" variant="outline-secondary" onClick={onCancel} disabled={loading}>
                 <CancelIcon/>
             </Button>
