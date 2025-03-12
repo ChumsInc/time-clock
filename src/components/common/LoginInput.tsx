@@ -29,7 +29,7 @@ const LoginInput = ({ref, inputProps}: LoginInputProps) => {
     return (
         <InputGroup size="lg">
             <InputGroup.Text as="label" htmlFor={id}>Login</InputGroup.Text>
-            <FormControl type="text"
+            <FormControl type="text" autoComplete="off"
                          id={id}
                          ref={ref}
                          value={code} onChange={onChange}
