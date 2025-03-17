@@ -21,7 +21,7 @@ export default function PayPeriodSelect({value, onChange, selectProps, ...rest}:
     }
 
     return (
-        <InputGroup size="lg" {...rest}>
+        <InputGroup {...rest}>
             <InputGroup.Text as="label" htmlFor={selectProps?.id ?? id} aria-label="Pay Period">
                 <span className="bi-calendar3-range" aria-hidden="true" />
             </InputGroup.Text>

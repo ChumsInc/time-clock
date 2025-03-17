@@ -36,11 +36,11 @@ const UserLoginForm = ({
             <LoginInput ref={inputRef}/>
             {!!timerOffset && <CountdownTimer startOffset={timerOffset} onComplete={onCancel}/>}
             <ClockButtons className="mt-3">
-                <Button type="submit" variant="primary" size="lg">
+                <Button type="submit" variant="primary">
                     <span>Log In</span>
                     <LogInIcon/>
                 </Button>
-                <Button type="reset" variant="secondary" size="lg" onClick={onCancel}>
+                <Button type="reset" variant="secondary" onClick={onCancel}>
                     <span>Cancel</span>
                     <CancelIcon/>
                 </Button>

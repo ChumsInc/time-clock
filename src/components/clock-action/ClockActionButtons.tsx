@@ -29,17 +29,17 @@ const ClockActionButtons =
         return (
             <ClockButtons className="mt-3">
                 {(!requiresOverride || (requiresOverride && actionType === CLOCK_ACTION_CLOCK_IN)) && (
-                    <Button type="button" variant="success" onClick={onClockIn} size="lg">
+                    <Button type="button" variant="success" onClick={onClockIn}>
                         <span>{overrideText ?? 'Clock In'}</span> <ClockIcon/>
                     </Button>
                 )}
                 {(!requiresOverride || (requiresOverride && actionType === CLOCK_ACTION_CLOCK_OUT)) && (
-                    <Button type="button" variant="danger" size="lg" onClick={onClockOut}>
+                    <Button type="button" variant="danger" onClick={onClockOut}>
                         <span>{overrideText ?? 'Clock Out'}</span> <ClockOutIcon/>
                     </Button>
                 )}
                 {requiresOverride && (
-                    <Button type="reset" variant="outline-secondary" size="lg" onClick={onCancel}>
+                    <Button type="reset" variant="outline-secondary" onClick={onCancel}>
                         <span>Cancel</span> <span className="bi-x-circle-fill"/>
                     </Button>
                 )}

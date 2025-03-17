@@ -27,8 +27,11 @@ const LoginInput = ({ref, inputProps}: LoginInputProps) => {
     const onChange = (ev: ChangeEvent<HTMLInputElement>) => dispatch(setCode(ev.target.value));
 
     return (
-        <InputGroup size="lg">
-            <InputGroup.Text as="label" htmlFor={id}>Login</InputGroup.Text>
+        <InputGroup>
+            <InputGroup.Text as="label" htmlFor={id}>
+                <span className="me-1 d-none d-lg-block">Login</span>
+                <span className="bi-key-fill" aria-label="Login" />
+            </InputGroup.Text>
             <FormControl type="text" autoComplete="off"
                          id={id}
                          ref={ref}

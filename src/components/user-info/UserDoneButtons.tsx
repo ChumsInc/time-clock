@@ -19,10 +19,10 @@ const UserDoneButtons = ({code, idPayPeriod}: { code: string, idPayPeriod?: numb
 
     return (
         <ClockButtons>
-            <Button type="button" variant="primary" size="lg" onClick={doneHandler}>
+            <Button type="button" variant="primary" onClick={doneHandler}>
                 <span>Done</span><span className="bi-check"/>
             </Button>
-            <Button variant="secondary" size="lg" onClick={reloadHandler} disabled={loading}>
+            <Button variant="secondary" onClick={reloadHandler} disabled={loading}>
                 <span>Reload</span><span className="bi-arrow-clockwise"/>
             </Button>
         </ClockButtons>
