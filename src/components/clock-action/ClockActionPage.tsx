@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import {type FormEvent, useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import CurrentDateTime from "../common/CurrentDateTime";
 import LoginInput from "../common/LoginInput";
@@ -12,7 +12,7 @@ import {clockAction} from "@/ducks/user/actions";
 import {useAppDispatch} from "@/app/configureStore";
 
 
-const ClockActionForm = () => {
+const ClockActionPage = () => {
     const dispatch = useAppDispatch();
     const code = useSelector(selectUserCode);
     const entry = useSelector(selectUserEntry);
@@ -53,8 +53,12 @@ const ClockActionForm = () => {
         dispatch(clearUser());
     }
 
+    const submitHandler = (ev:FormEvent) => {
+        ev.preventDefault();
+    }
+
     return (
-        <div>
+        <form autoComplete="off" onSubmit={submitHandler}>
             <CurrentDateTime/>
             <hr/>
             {!entry && (
@@ -83,8 +87,9 @@ const ClockActionForm = () => {
                     <CountdownTimer startOffset={5000} rate={300} onComplete={onCancel}/>
                 </>
             )}
-        </div>
+        </form>
+        // b%e@Q!x*vT#RJK@RTt$6ho9B
     );
 }
 
-export default ClockActionForm;
+export default ClockActionPage;

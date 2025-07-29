@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import {useCallback, useEffect, useState} from 'react';
 import {useSelector} from 'react-redux';
 import CurrentDateTime from "../common/CurrentDateTime";
 import UserLoginForm from "./UserLoginForm";
@@ -8,7 +8,6 @@ import {clearUser, selectEmployee, selectEmployeePayPeriod, selectUserCode, sele
 import UserDoneButtons from "./UserDoneButtons";
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {getUserInfo} from "@/ducks/user/actions";
-import PageContainer from "@/components/common/PageContainer";
 import {Accordion, Col, Row} from "react-bootstrap";
 import EmployeeName from "@/components/common/EmployeeName";
 import PayPeriodSelect from "@/components/PayPeriodSelect";
@@ -39,7 +38,7 @@ const ApprovalPage = () => {
 
 
     return (
-        <PageContainer>
+        <div>
             <CurrentDateTime/>
             <hr/>
             {!employee && (
@@ -70,9 +69,9 @@ const ApprovalPage = () => {
                 </div>
             )}
             {!!employee && (
-                <UserDoneButtons code={code} idPayPeriod={payPeriod?.id} />
+                <UserDoneButtons code={code} idPayPeriod={payPeriod?.id}/>
             )}
-        </PageContainer>
+        </div>
     );
 }
 

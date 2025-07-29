@@ -1,6 +1,6 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
-import {BannerImage} from "chums-types";
-import {RootState} from "@/app/configureStore";
+import type {BannerImage} from "chums-types";
+import type {RootState} from "@/app/configureStore";
 import {fetchBanners} from "@/ducks/banners/api";
 import {selectBannersStatus} from "@/ducks/banners/index";
 
@@ -10,7 +10,7 @@ export const loadBanners = createAsyncThunk<BannerImage[], void, { state: RootSt
         return await fetchBanners();
     },
     {
-        condition: (arg, {getState}) => {
+        condition: (_, {getState}) => {
             const state = getState();
             return selectBannersStatus(state) === 'idle';
         }

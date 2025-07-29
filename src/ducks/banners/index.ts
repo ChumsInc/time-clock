@@ -1,6 +1,6 @@
 import {createEntityAdapter, createSlice} from "@reduxjs/toolkit";
 import {loadBanners} from "@/ducks/banners/actions";
-import {BannerImage} from "chums-types";
+import type {BannerImage} from "chums-types";
 
 export const bannersAdapter = createEntityAdapter<BannerImage, number>({
     selectId: (arg) => arg.id,

@@ -1,5 +1,5 @@
 import {createEntityAdapter, createSlice} from "@reduxjs/toolkit";
-import {PayPeriodEntry} from "@/src/types";
+import type {PayPeriodEntry} from "@/src/types";
 import {clearUser} from "@/ducks/user";
 import {approvePayPeriod, clockAction, getUserInfo} from "@/ducks/user/actions";
 import {isClockActionSuccess, isGetUserInfoSuccessResponse} from "@/ducks/user/utils";

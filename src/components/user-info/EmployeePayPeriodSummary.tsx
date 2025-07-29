@@ -1,8 +1,7 @@
-import React from 'react';
 import {useSelector} from 'react-redux';
 import Time from "./Time";
 import classNames from 'classnames';
-import {ENTRY_BEREAVJURY, ENTRY_FMLA100, ENTRY_FMLA67, ENTRY_HOLIDAY, ENTRY_PL, PayPeriodEntry} from "../../types";
+import {ENTRY_BEREAVJURY, ENTRY_FMLA100, ENTRY_FMLA67, ENTRY_HOLIDAY, ENTRY_PL, type PayPeriodEntry} from "../../types";
 import EntryType from "./EntryType";
 import DateRange, {dateRange} from "../DateRange";
 import {selectEmployee, selectEmployeePayPeriod} from "@/ducks/user";

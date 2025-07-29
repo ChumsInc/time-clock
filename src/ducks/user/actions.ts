@@ -1,21 +1,24 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
 import {
-    ApprovePayPeriodArg,
+    type ApprovePayPeriodArg,
     fetchUserInfo,
     postApprovePayPeriod,
     postClockEvent,
-    PostClockInArg,
-    UserInfoArg
+    type PostClockInArg,
+    type UserInfoArg
 } from "@/ducks/user/api";
-import {
+import type {
     ClockActionErrorResponse,
-    ClockActionSuccessResponse, GetUserInfoErrorResponse,
+    ClockActionSuccessResponse,
+    GetUserInfoErrorResponse,
     GetUserInfoSuccessResponse
 } from "@/ducks/user/response-types";
-import {RootState} from "@/app/configureStore";
+import type {RootState} from "@/app/configureStore";
 import {selectStatus} from "@/ducks/user/index";
 
-export const clockAction = createAsyncThunk<ClockActionSuccessResponse|ClockActionErrorResponse|null, PostClockInArg, {state: RootState}>(
+export const clockAction = createAsyncThunk<ClockActionSuccessResponse | ClockActionErrorResponse | null, PostClockInArg, {
+    state: RootState
+}>(
     'user/clockIn',
     async (arg) => {
         return await postClockEvent(arg)
@@ -28,7 +31,9 @@ export const clockAction = createAsyncThunk<ClockActionSuccessResponse|ClockActi
     }
 )
 
-export const getUserInfo = createAsyncThunk<GetUserInfoSuccessResponse | GetUserInfoErrorResponse | null, UserInfoArg, {state:RootState}>(
+export const getUserInfo = createAsyncThunk<GetUserInfoSuccessResponse | GetUserInfoErrorResponse | null, UserInfoArg, {
+    state: RootState
+}>(
     'user/getUserInfo',
     async (arg) => {
         return await fetchUserInfo(arg);
@@ -41,7 +46,9 @@ export const getUserInfo = createAsyncThunk<GetUserInfoSuccessResponse | GetUser
     }
 )
 
-export const approvePayPeriod = createAsyncThunk<GetUserInfoSuccessResponse | GetUserInfoErrorResponse | null, ApprovePayPeriodArg, {state:RootState}>(
+export const approvePayPeriod = createAsyncThunk<GetUserInfoSuccessResponse | GetUserInfoErrorResponse | null, ApprovePayPeriodArg, {
+    state: RootState
+}>(
     'user/approvePayPeriod',
     async (arg) => {
         return await postApprovePayPeriod(arg);

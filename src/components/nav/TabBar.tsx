@@ -1,6 +1,5 @@
-import React from 'react';
-import {Nav, NavProps} from "react-bootstrap";
-import {TabDetail} from "@/components/nav/types";
+import Nav, {type NavProps} from "react-bootstrap/Nav";
+import type {TabDetail} from "@/components/nav/types";
 import NavLinkTitle from "@/components/nav/NavLinkTitle";
 
 

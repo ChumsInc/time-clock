@@ -1,4 +1,4 @@
-import React, {Fragment, useEffect} from 'react';
+import {Fragment, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import CurrentDateTime from "../common/CurrentDateTime";
 import UserLoginForm from "./UserLoginForm";
@@ -7,7 +7,6 @@ import {clearUser, selectEmployee, selectEmployeePayPeriod, selectUserCode} from
 import UserDoneButtons from "./UserDoneButtons";
 import {getUserInfo} from "@/ducks/user/actions";
 import {useAppDispatch} from "@/app/configureStore";
-import PageContainer from "@/components/common/PageContainer";
 
 const UserInfoPage = () => {
     const dispatch = useAppDispatch();
@@ -21,13 +20,20 @@ const UserInfoPage = () => {
         }
     }, []);
 
+    const loginHandler = () => {
+        dispatch(getUserInfo({code}));
+    }
+
+    const cancelHandler = () => {
+        dispatch(clearUser());
+    }
+
     return (
-        <PageContainer>
+        <div>
             <CurrentDateTime/>
             <hr/>
             {!employee && (
-                <UserLoginForm onLogin={() => dispatch(getUserInfo({code}))}
-                               onCancel={() => dispatch(clearUser())}/>
+                <UserLoginForm onLogin={loginHandler} onCancel={cancelHandler}/>
             )}
             {employee && payPeriod && (
                 <Fragment>
@@ -36,9 +42,9 @@ const UserInfoPage = () => {
                 </Fragment>
             )}
             {employee && (
-                <UserDoneButtons code={code} idPayPeriod={payPeriod?.id} />
+                <UserDoneButtons code={code} idPayPeriod={payPeriod?.id}/>
             )}
-        </PageContainer>
+        </div>
     );
 }
 

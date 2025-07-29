@@ -4,22 +4,24 @@ import ApprovalPage from "@/components/user-info/ApprovalPage";
 import AppVersion from "../ducks/version/AppVersion";
 import AppAlertsList from "@/app/AppAlertsList";
 import TabBar from "@/components/nav/TabBar";
-import ClockPage from "@/components/clock-action/ClockPage";
+import ClockActionPage from "@/components/clock-action/ClockActionPage.tsx";
+import PageContainer from "@/components/common/PageContainer.tsx";
 
-const App: React.FC = () => {
+export default function App() {
     const [tab, setTab] = React.useState<string | null>('clock');
 
     return (
         <div className="container tc__container">
             <TabBar activeKey={tab ?? 'clock'} onSelect={setTab}/>
             <AppAlertsList/>
-            {tab === 'clock' && (<ClockPage/>)}
-            {tab === 'login' && (<UserInfoPage/>)}
-            {tab === 'approve' && (<ApprovalPage/>)}
+            <PageContainer>
+                {tab === 'clock' && (<ClockActionPage/>)}
+                {tab === 'login' && (<UserInfoPage/>)}
+                {tab === 'approve' && (<ApprovalPage/>)}
+            </PageContainer>
             <footer>
                 <AppVersion/>
             </footer>
         </div>
     );
 }
-export default App;

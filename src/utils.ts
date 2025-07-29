@@ -1,4 +1,4 @@
-import {TCTime} from "./types";
+import type {TCTime} from "./types";
 
 export const toSeconds = ({hours = 0, minutes = 0, seconds = 0}:TCTime): number => {
     return (hours || 0) * 3600

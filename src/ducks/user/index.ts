@@ -1,8 +1,8 @@
-import {createSlice, PayloadAction} from "@reduxjs/toolkit";
+import {createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import {approvePayPeriod, clockAction, getUserInfo} from "@/ducks/user/actions";
 import {isClockActionRequiresOverride, isClockActionSuccess, isGetUserInfoSuccessResponse} from "@/ducks/user/utils";
 import {_clearUser} from "@/ducks/user/case-reducers";
-import {UserState} from "@/ducks/user/state";
+import type {UserState} from "@/ducks/user/state";
 import {dismissAlert} from "@chumsinc/alert-list";
 
 const initialState: UserState = {
@@ -95,7 +95,7 @@ const userSlice = createSlice({
                 _clearUser(state, action);
             })
             .addCase(dismissAlert, (state, action) => {
-                if ([clockAction.typePrefix, getUserInfo.typePrefix, approvePayPeriod.typePrefix].includes(action.payload?.context)) {
+                if ([clockAction.typePrefix, getUserInfo.typePrefix, approvePayPeriod.typePrefix].includes(action.payload?.context ?? '')) {
                     state.status = 'idle';
                 }
             })

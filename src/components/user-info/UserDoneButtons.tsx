@@ -1,4 +1,3 @@
-import React from 'react';
 import {clearUser, selectUserLoading} from "@/ducks/user";
 import {useSelector} from "react-redux";
 import {Button} from "react-bootstrap";

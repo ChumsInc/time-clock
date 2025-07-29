@@ -1,6 +1,6 @@
-import {PayPeriod} from "chums-types";
+import type {PayPeriod} from "chums-types";
 import dayjs from "dayjs";
-import {PHP_PayPeriod} from "@/src/types";
+import type {PHP_PayPeriod} from "@/src/types";
 
 export const payPeriodSorter = (a:PayPeriod, b:PayPeriod) => {
     return dayjs(a.startDate).isAfter(b.startDate) ? 1 : -1;

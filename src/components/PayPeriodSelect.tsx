@@ -1,6 +1,6 @@
-import React, {ChangeEvent, useId} from 'react';
+import {type ChangeEvent, useId} from 'react';
 import {selectClosedPayPeriods, selectOpenPayPeriods} from "@/ducks/payPeriods";
-import {FormSelect, FormSelectProps, InputGroup, InputGroupProps} from "react-bootstrap";
+import {FormSelect, type FormSelectProps, InputGroup, type InputGroupProps} from "react-bootstrap";
 import {useAppSelector} from "@/app/configureStore";
 import {payPeriodDateRange, payPeriodLocaleDateString} from "@/ducks/payPeriods/utils";
 

@@ -1,5 +1,4 @@
-import React from 'react';
-import {Alert, AlertProps} from "react-bootstrap";
+import Alert, {type AlertProps} from "react-bootstrap/Alert";
 
 export interface ActionTimeAlertProps extends AlertProps {
     message: string,

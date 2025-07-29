@@ -1,4 +1,3 @@
-import React from 'react';
 import {ENTRY_TYPE_DESCRIPTIONS} from '../../types'
 
 export interface EntryTypeProps {

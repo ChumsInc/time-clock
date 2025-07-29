@@ -1,4 +1,3 @@
-import React from 'react';
 import EmployeeName from "../common/EmployeeName";
 import EmployeePlSummary from "./EmployeePLSummary";
 import EmployeeEntry from "./EmployeeEntry";

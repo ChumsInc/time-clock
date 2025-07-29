@@ -1,6 +1,5 @@
-import React from 'react';
 import styled from "@emotion/styled";
-import {Button, ButtonProps} from "react-bootstrap";
+import Button, {type ButtonProps} from "react-bootstrap/Button";
 
 
 const Block = styled.div`

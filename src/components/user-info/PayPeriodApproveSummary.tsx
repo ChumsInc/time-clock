@@ -1,4 +1,4 @@
-import React, {FormEvent, useEffect} from 'react';
+import {type FormEvent, useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import {ENTRY_PL} from "@/app/constants";
 import TimeField from "./TimeField";

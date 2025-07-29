@@ -1,4 +1,4 @@
-import {Employee, PayPeriodEntry, PHP_PayPeriod} from "@/src/types";
+import type {Employee, PayPeriodEntry, PHP_PayPeriod} from "@/src/types";
 
 export interface UserState {
     code: string;

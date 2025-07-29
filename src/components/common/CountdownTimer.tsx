@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from 'react';
+import {useEffect, useState} from 'react';
 import {ProgressBar} from "react-bootstrap";
-import {Variant} from "react-bootstrap/types";
+import type {Variant} from "react-bootstrap/types";
 
 const calcVariant = (pct: number): Variant => {
     if (pct > 0.75) {

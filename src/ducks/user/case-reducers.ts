@@ -1,5 +1,5 @@
-import {CaseReducer} from "@reduxjs/toolkit";
-import {UserState} from "@/ducks/user/state";
+import type {CaseReducer} from "@reduxjs/toolkit";
+import type {UserState} from "@/ducks/user/state";
 
 export const _clearUser:CaseReducer<UserState> = (state) => {
     state.code = '';

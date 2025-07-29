@@ -1,4 +1,4 @@
-import React, {MouseEvent, useEffect, useRef, useState} from 'react';
+import {type MouseEvent, useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import {loadVersion, selectNextVersion, selectUpdateAvailable, selectVersion, selectVersionStatus} from "./index";
 import {Alert, Button} from "react-bootstrap";

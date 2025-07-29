@@ -1,9 +1,9 @@
 import {fetchJSON} from "@chumsinc/ui-utils";
-import {BannerImage} from "chums-types";
+import type {BannerImage} from "chums-types";
 
 export async function fetchBanners(): Promise<BannerImage[]> {
     try {
-        const url = '/api/timeclock/images.json';
+        const url = '/api/payroll/timeclock/images.json';
         const res = await fetchJSON<{ banners: BannerImage[] }>(url);
         return res?.banners ?? [];
     } catch (err: unknown) {

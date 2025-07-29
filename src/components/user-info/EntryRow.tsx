@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from "classnames";
 import EntryType from "./EntryType";
-import {ENTRY_TIMECLOCK, PayPeriodEntry} from "../../types";
+import {ENTRY_TIMECLOCK, type PayPeriodEntry} from "../../types";
 import Time from "./Time";
 import styled from "@emotion/styled";
 

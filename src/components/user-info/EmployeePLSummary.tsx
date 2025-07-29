@@ -1,4 +1,3 @@
-import React from 'react';
 import {useSelector} from 'react-redux';
 import Time from "./Time";
 import classNames from 'classnames';

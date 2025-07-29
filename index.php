@@ -11,5 +11,5 @@ $ui = new WebUI2([
     'requiredRoles' => [],
     'requireLogin'  => false,
 ]);
-$ui->addManifestJSON('public/js/manifest.json')
+$ui->addViteManifest()
     ->render();

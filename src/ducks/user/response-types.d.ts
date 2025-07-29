@@ -1,4 +1,4 @@
-import {Employee, PayPeriodEntry} from "@/src/types";
+import type {Employee, PayPeriodEntry} from "@/src/types";
 
 export type ClockInActionType = 'clock-in'|'clock-out';
 export type ClockActionType = ClockInActionType|'get-userinfo';

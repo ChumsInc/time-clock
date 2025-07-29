@@ -2,7 +2,7 @@ import React, {useEffect, useRef} from 'react';
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {selectAllBanners} from "@/ducks/banners";
 import {loadBanners} from "@/ducks/banners/actions";
-import {Carousel, CarouselProps} from "react-bootstrap";
+import Carousel, {type CarouselProps} from "react-bootstrap/Carousel";
 import styled from "@emotion/styled";
 
 const CarouselImage = styled.img`

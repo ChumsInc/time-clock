@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import Time from "./Time";
 import {selectUserCode, selectUserEntry, selectUserLoading} from "@/ducks/user";

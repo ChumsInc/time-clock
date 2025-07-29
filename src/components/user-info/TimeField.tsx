@@ -1,6 +1,6 @@
-import React, {useId} from 'react';
+import {useId} from 'react';
 import classNames from "classnames";
-import Time, {TimeProps} from "./Time";
+import Time, {type TimeProps} from "./Time";
 import styled from "@emotion/styled";
 
 const TimeGroup = styled.div`

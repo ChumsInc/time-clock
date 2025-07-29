@@ -1,4 +1,3 @@
-import React from 'react';
 import {CLOCK_ACTION_CLOCK_IN, CLOCK_ACTION_CLOCK_OUT} from "@/app/constants";
 import ClockIcon from "./ClockIcon";
 import ClockOutIcon from "./ClockOutIcon";

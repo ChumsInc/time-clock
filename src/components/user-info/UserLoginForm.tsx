@@ -1,4 +1,4 @@
-import React, {FormEvent, useEffect, useRef} from 'react';
+import {type FormEvent, useEffect, useRef} from 'react';
 import classNames from 'classnames';
 import LoginInput from "../common/LoginInput";
 import CountdownTimer from "../common/CountdownTimer";

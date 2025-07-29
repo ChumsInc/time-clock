@@ -1,5 +1,5 @@
-import {createEntityAdapter, createSlice, PayloadAction} from "@reduxjs/toolkit";
-import {PayPeriod} from "chums-types";
+import {createEntityAdapter, createSlice, type PayloadAction} from "@reduxjs/toolkit";
+import type {PayPeriod} from "chums-types";
 import dayjs from "dayjs";
 import {payPeriodSorter, toPayPeriod} from "@/ducks/payPeriods/utils";
 import {getUserInfo} from "@/ducks/user/actions";

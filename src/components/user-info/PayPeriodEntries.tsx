@@ -5,7 +5,7 @@ import EntryRow from "./EntryRow";
 import {selectEmployee, selectEmployeePayPeriod} from "@/ducks/user";
 import {useAppSelector} from "@/app/configureStore";
 import {selectEntries} from "@/ducks/entries";
-import {PayPeriodEntry, PayPeriodWeek} from "@/src/types";
+import type {PayPeriodEntry, PayPeriodWeek} from "@/src/types";
 import {Accordion} from "react-bootstrap";
 
 interface WeekHeaderProps {

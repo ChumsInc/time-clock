@@ -1,6 +1,6 @@
 import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
 import {fetchJSON} from "@chumsinc/ui-utils";
-import {RootState} from "@/app/configureStore";
+import type {RootState} from "@/app/configureStore";
 
 export interface VersionState {
     status: 'idle' | 'loading',
@@ -71,7 +71,7 @@ export const loadVersion = createAsyncThunk<string | null, void, { state: RootSt
         return await fetchVersion();
     },
     {
-        condition: (arg, {getState}) => {
+        condition: (_, {getState}) => {
             const state = getState();
             return selectVersionStatus(state) === 'idle';
         }

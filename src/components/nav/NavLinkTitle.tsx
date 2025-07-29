@@ -1,6 +1,5 @@
 import styled from "@emotion/styled";
-import {TabDetail} from "@/components/nav/types";
-import React from "react";
+import type {TabDetail} from "@/components/nav/types";
 import classNames from "classnames";
 
 const NavTitle = styled.div`
