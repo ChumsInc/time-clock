@@ -1,17 +1,23 @@
-import {createAsyncThunk, createSlice} from "@reduxjs/toolkit";
+import {createAsyncThunk, createSelector, createSlice} from "@reduxjs/toolkit";
 import {fetchJSON} from "@chumsinc/ui-utils";
 import type {RootState} from "@/app/configureStore";
+import {selectEmployee} from "@/ducks/user";
+import dayjs from "dayjs";
 
 export interface VersionState {
     status: 'idle' | 'loading',
     version: string | null;
     available: string | null;
+    timeLoaded: string;
+    timeChecked: string|null;
 }
 
 const initialState: VersionState = {
     status: 'idle',
     version: null,
     available: null,
+    timeLoaded: dayjs().toJSON(),
+    timeChecked: null,
 }
 const versionSlice = createSlice({
     name: "version",
@@ -26,9 +32,10 @@ const versionSlice = createSlice({
                 state.status = 'idle';
                 if (action.payload) {
                     if (!state.version) {
-                        state.version = action.payload;
+                        state.version = action.payload.version;
                     }
-                    state.available = action.payload;
+                    state.available = action.payload.version;
+                    state.timeChecked = action.payload.timeChecked ?? null;
                 }
             })
             .addCase(loadVersion.rejected, (state) => {
@@ -40,21 +47,38 @@ const versionSlice = createSlice({
         selectNextVersion: (state) => state.available,
         selectUpdateAvailable: (state) => !!state.version && state.available !== state.version,
         selectVersionStatus: (state) => state.status,
+        selectTimeLoaded: (state) => state.timeLoaded,
+        selectTimeChecked: (state) => state.timeChecked,
     }
 });
 
-export const {selectNextVersion, selectVersionStatus, selectVersion, selectUpdateAvailable} = versionSlice.selectors;
+export const {
+    selectNextVersion,
+    selectVersionStatus,
+    selectVersion,
+    selectUpdateAvailable,
+    selectTimeLoaded,
+    selectTimeChecked,
+} = versionSlice.selectors;
 
 interface FetchVersionResponse {
     name: string;
     version: string;
+    timeChecked?: string;
 }
 
-async function fetchVersion(): Promise<string | null> {
+async function fetchVersion(): Promise<FetchVersionResponse | null> {
     try {
         const url = './package.json';
         const res = await fetchJSON<FetchVersionResponse>(url, {cache: 'no-cache'});
-        return res?.version ?? null;
+        if (!res) {
+            return null
+        }
+        return {
+            name: res.name,
+            version: res.version,
+            timeChecked: dayjs().toJSON(),
+        }
     } catch (err: unknown) {
         if (err instanceof Error) {
             console.debug("fetchVersion()", err.message);
@@ -65,7 +89,7 @@ async function fetchVersion(): Promise<string | null> {
     }
 }
 
-export const loadVersion = createAsyncThunk<string | null, void, { state: RootState }>(
+export const loadVersion = createAsyncThunk<FetchVersionResponse | null, void, { state: RootState }>(
     'version/load',
     async () => {
         return await fetchVersion();
@@ -75,6 +99,15 @@ export const loadVersion = createAsyncThunk<string | null, void, { state: RootSt
             const state = getState();
             return selectVersionStatus(state) === 'idle';
         }
+    }
+)
+
+export const selectShouldReload = createSelector(
+    [selectTimeLoaded, selectTimeChecked, selectVersionStatus, selectEmployee,],
+    (timeLoaded, timeChecked, status, employee, ) => {
+        return dayjs(timeChecked).diff(timeLoaded, 'hours') > 12
+            && !employee
+            && status === 'idle';
     }
 )
 

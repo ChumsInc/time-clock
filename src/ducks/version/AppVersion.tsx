@@ -1,15 +1,23 @@
 import {type MouseEvent, useEffect, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
-import {loadVersion, selectNextVersion, selectUpdateAvailable, selectVersion, selectVersionStatus} from "./index";
+import {
+    loadVersion,
+    selectNextVersion,
+    selectShouldReload,
+    selectUpdateAvailable,
+    selectVersion,
+    selectVersionStatus
+} from "./index";
 import {Alert, Button} from "react-bootstrap";
-import {useAppDispatch} from "@/app/configureStore";
+import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import styled from "@emotion/styled";
 
 const AlertContainer = styled.div`
     cursor: pointer;
 `
 
-const updateCheckInterval = 30 * 60 * 1000;
+const updateCheckInterval =  30 * 60 * 1000;
+
 
 export default function AppVersion() {
     const dispatch = useAppDispatch();
@@ -17,8 +25,9 @@ export default function AppVersion() {
     const updateAvailable = useSelector(selectUpdateAvailable);
     const nextVersion = useSelector(selectNextVersion);
     const status = useSelector(selectVersionStatus);
-    const intervalRef = useRef<number>(0);
+    const shouldReload = useAppSelector(selectShouldReload);
     const [ignored, setIgnored] = useState<string | null>(null);
+    const intervalRef = useRef<number>(0);
 
     useEffect(() => {
         dispatch(loadVersion());
@@ -29,12 +38,18 @@ export default function AppVersion() {
         return () => {
             window.clearInterval(intervalRef.current);
         }
-    }, []);
+    }, [updateCheckInterval]);
+
+    useEffect(() => {
+        if (shouldReload) {
+            document.location.reload();
+        }
+    }, [shouldReload]);
 
 
     const onClickUpdate = (ev: MouseEvent) => {
         ev.preventDefault();
-        if (global.document) {
+        if (document) {
             document.location.reload();
         }
     }
