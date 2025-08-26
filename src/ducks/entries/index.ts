@@ -1,8 +1,9 @@
-import {createEntityAdapter, createSlice} from "@reduxjs/toolkit";
+import {createEntityAdapter, createSelector, createSlice} from "@reduxjs/toolkit";
 import type {PayPeriodEntry} from "@/src/types";
 import {clearUser} from "@/ducks/user";
 import {approvePayPeriod, clockAction, getUserInfo} from "@/ducks/user/actions";
 import {isClockActionSuccess, isGetUserInfoSuccessResponse} from "@/ducks/user/utils";
+import {entrySorter} from "@/ducks/entries/utils.ts";
 
 const entriesAdapter = createEntityAdapter<PayPeriodEntry, number>({
     selectId: (arg) => arg.id,
@@ -67,11 +68,26 @@ const entriesSlice = createSlice({
             })
     },
     selectors: {
-        selectEntries: (state) => adapterSelectors.selectAll(state).filter(e => !e.deleted),
-        selectDeletedEntries: (state) => adapterSelectors.selectAll(state).filter(e => e.deleted),
+        selectAllEntries: (state) => adapterSelectors.selectAll(state),
         selectById: (state, id: number) => adapterSelectors.selectById(state, id),
     }
 });
 
-export const {selectEntries, selectDeletedEntries, selectById} = entriesSlice.selectors;
+export const {selectAllEntries, selectById} = entriesSlice.selectors;
+
+export const selectEntries = createSelector(
+    [selectAllEntries],
+    (entries) => {
+        return entries.filter(e => !e.deleted)
+            .sort(entrySorter({field: 'EntryDate', ascending: true}))
+    }
+)
+
+export const selectDeletedEntries = createSelector(
+    [selectAllEntries],
+    (entries) => {
+        return entries.filter(e => e.deleted)
+            .sort(entrySorter({field: 'EntryDate', ascending: true}))
+    }
+)
 export default entriesSlice;

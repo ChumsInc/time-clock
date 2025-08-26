@@ -1,4 +1,3 @@
-import {useSelector} from 'react-redux';
 import Time from "./Time";
 import classNames from 'classnames';
 import {ENTRY_BEREAVJURY, ENTRY_FMLA100, ENTRY_FMLA67, ENTRY_HOLIDAY, ENTRY_PL, type PayPeriodEntry} from "../../types";
@@ -17,7 +16,7 @@ const filterSpecialEntries = (entry: PayPeriodEntry) => [
     ENTRY_FMLA100].includes(entry.idEntryType);
 
 const EmployeePayPeriodSummary = ({eventKey}: { eventKey: string }) => {
-    const employee = useSelector(selectEmployee);
+    const employee = useAppSelector(selectEmployee);
     const payPeriod = useAppSelector(selectEmployeePayPeriod);
     const entries = useAppSelector(selectEntries);
 
@@ -59,7 +58,8 @@ const EmployeePayPeriodSummary = ({eventKey}: { eventKey: string }) => {
                         <td className="right">
                             <Time seconds={payPeriod.weeks[0].duration + payPeriod.weeks[1].duration}/>
                         </td>
-                        <td className="right"><Time seconds={payPeriod.weeks[0].overtime + payPeriod.weeks[1].overtime}/></td>
+                        <td className="right"><Time
+                            seconds={payPeriod.weeks[0].overtime + payPeriod.weeks[1].overtime}/></td>
                     </tr>
                     </tfoot>
                 </table>

@@ -1,7 +1,6 @@
 import {useEffect} from 'react';
-import {useSelector} from 'react-redux';
 import Time from "./Time";
-import {selectUserCode, selectUserEntry, selectUserLoading} from "@/ducks/user";
+import {selectEmployee, selectUserCode, selectUserEntry, selectUserLoading} from "@/ducks/user";
 import {useAppDispatch, useAppSelector} from "@/app/configureStore";
 import {getUserInfo} from "@/ducks/user/actions";
 import {Accordion, Alert} from "react-bootstrap";
@@ -9,8 +8,9 @@ import {Accordion, Alert} from "react-bootstrap";
 const EmployeeEntry = ({eventKey}: { eventKey: string }) => {
     const dispatch = useAppDispatch();
     const code = useAppSelector(selectUserCode);
-    const entry = useSelector(selectUserEntry);
-    const loading = useSelector(selectUserLoading);
+    const entry = useAppSelector(selectUserEntry);
+    const loading = useAppSelector(selectUserLoading);
+    const employee = useAppSelector(selectEmployee);
 
     useEffect(() => {
         if (!entry && !loading) {
@@ -23,6 +23,9 @@ const EmployeeEntry = ({eventKey}: { eventKey: string }) => {
     const clockOutDate = !!entry?.clockOutTime ? new Date(entry.clockOutTime * 1000).toLocaleDateString() : null;
     const clockOutTime = !!entry?.clockOutTime ? new Date(entry.clockOutTime * 1000).toLocaleTimeString() : (!!entry?.clockInTime ? 'clocked in' : 'n/a');
 
+    if (!employee || employee.PayMethod === 'S') {
+        return null;
+    }
     return (
         <Accordion.Item eventKey={eventKey}>
             <Accordion.Header>Latest Entry</Accordion.Header>

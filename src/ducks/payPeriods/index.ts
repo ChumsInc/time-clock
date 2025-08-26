@@ -1,4 +1,4 @@
-import {createEntityAdapter, createSlice, type PayloadAction} from "@reduxjs/toolkit";
+import {createEntityAdapter, createSelector, createSlice, type PayloadAction} from "@reduxjs/toolkit";
 import type {PayPeriod} from "chums-types";
 import dayjs from "dayjs";
 import {payPeriodSorter, toPayPeriod} from "@/ducks/payPeriods/utils";
@@ -59,31 +59,41 @@ const payPeriodsSlice = createSlice({
         selectCurrentPayPeriod: (state) => {
             state.current;
         },
-        selectClosedPayPeriods: (state) => {
-            const hireDate = dayjs(state.hireDate);
-            if (!hireDate.isValid()) {
-                return [];
-            }
-            return adapterSelectors.selectAll(state)
-                .filter(pp => pp.completed)
-                .filter(pp => dayjs(pp.endDate).isAfter(hireDate))
-                .sort(payPeriodSorter)
-                .reverse();
-        },
-        selectOpenPayPeriods: (state) => {
-            const hireDate = dayjs(state.hireDate);
-            if (!hireDate.isValid()) {
-                return [];
-            }
-            return adapterSelectors.selectAll(state)
-                .filter(pp => !pp.completed)
-                .filter(pp => dayjs(pp.endDate).isAfter(hireDate))
-                .sort(payPeriodSorter);
-        },
+        selectHireDate: (state) => state.hireDate,
+        selectAllPayPeriods: (state) => adapterSelectors.selectAll(state),
     },
 });
 
-export const {selectCurrentPayPeriod, selectClosedPayPeriods, selectOpenPayPeriods} = payPeriodsSlice.selectors;
+export const {selectCurrentPayPeriod, selectAllPayPeriods, selectHireDate} = payPeriodsSlice.selectors;
 export const {setCurrentPayPeriod} = payPeriodsSlice.actions;
+
+export const selectOpenPayPeriods = createSelector(
+    [selectAllPayPeriods, selectHireDate],
+    (payPeriods, _hireDate) => {
+        const hireDate = dayjs(_hireDate);
+        if (!hireDate.isValid()) {
+            return [];
+        }
+        return payPeriods
+            .filter(pp => !pp.completed)
+            .filter(pp => dayjs(pp.endDate).isAfter(hireDate))
+            .sort(payPeriodSorter);
+    }
+)
+
+export const selectClosedPayPeriods = createSelector(
+    [selectAllPayPeriods, selectHireDate],
+    (payPeriods, _hireDate) => {
+        const hireDate = dayjs(_hireDate);
+        if (!hireDate.isValid()) {
+            return [];
+        }
+        return payPeriods
+            .filter(pp => pp.completed)
+            .filter(pp => dayjs(pp.endDate).isAfter(hireDate))
+            .sort(payPeriodSorter)
+            .reverse();
+    }
+)
 
 export default payPeriodsSlice;
