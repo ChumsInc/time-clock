@@ -12,4 +12,5 @@ export const _clearUser:CaseReducer<UserState> = (state) => {
     state.clockInTime = null;
     state.clockOutTime = null;
     state.idPayPeriod = null;
+    state.overrideText = null;
 }
