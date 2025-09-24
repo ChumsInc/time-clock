@@ -65,14 +65,14 @@ const ClockActionPage = () => {
                 <LoginInput ref={inputRef}/>
             )}
             <EmployeeName/>
+            {!!entryAlert && (
+                <div className="my-1" dangerouslySetInnerHTML={{__html: entryAlert}}/>
+            )}
             {(!entry?.id || requiresOverride) && (
                 <ClockActionButtons onClockOut={onClockOut}
                                     onClockIn={onClockIn}
                                     onCancel={onCancel}
                                     actionType={currentAction}/>
-            )}
-            {!!entryAlert && (
-                <div className="my-1" dangerouslySetInnerHTML={{__html: entryAlert}}/>
             )}
             {!requiresOverride && entry && (
                 <>

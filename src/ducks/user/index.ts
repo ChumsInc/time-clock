@@ -45,6 +45,7 @@ const userSlice = createSlice({
                     state.entryAlert = action.payload.confirm;
                     state.overrideText = null;
                     state.code = '';
+                    state.requiresOverride = false;
                     return;
                 }
                 if (isClockActionRequiresOverride(action.payload)) {

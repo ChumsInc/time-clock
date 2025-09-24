@@ -19,7 +19,7 @@ import {selectStatus} from "@/ducks/user/index";
 export const clockAction = createAsyncThunk<ClockActionSuccessResponse | ClockActionErrorResponse | null, PostClockInArg, {
     state: RootState
 }>(
-    'user/clockIn',
+    'user/clockAction',
     async (arg) => {
         return await postClockEvent(arg)
     },
