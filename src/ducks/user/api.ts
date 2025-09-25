@@ -21,7 +21,14 @@ export async function postClockEvent(arg: PostClockInArg): Promise<ClockActionSu
             code: arg.code,
             ['user-override']: arg.override ? 1 : 0,
         });
-        const res = await fetchJSON<ClockActionSuccessResponse | ClockActionErrorResponse>(CLOCK_ACTION_URL, {
+        const params = new URLSearchParams();
+        params.set('action', arg.action);
+        params.set('code', arg.code);
+        if (arg.override) {
+            params.set('user-override', '1');
+        }
+        const url = `${CLOCK_ACTION_URL}?${params.toString()}`;
+        const res = await fetchJSON<ClockActionSuccessResponse | ClockActionErrorResponse>(url, {
             method: "POST",
             body
         });
@@ -44,12 +51,17 @@ export interface UserInfoArg {
 
 export async function fetchUserInfo(arg: UserInfoArg): Promise<GetUserInfoSuccessResponse | GetUserInfoErrorResponse | null> {
     try {
+        const params = new URLSearchParams();
+        params.set('action', 'get-userinfo');
+        params.set('code', arg.code);
+
         const body = JSON.stringify({
             action: 'get-userinfo',
             code: arg.code,
             idPayPeriod: arg.idPayPeriod ?? 0,
         });
-        const res = await fetchJSON<GetUserInfoSuccessResponse | GetUserInfoErrorResponse>(CLOCK_ACTION_URL, {
+        const url = `${CLOCK_ACTION_URL}?${params.toString()}`;
+        const res = await fetchJSON<GetUserInfoSuccessResponse | GetUserInfoErrorResponse>(url, {
             method: "POST",
             body
         });
@@ -72,13 +84,18 @@ export interface ApprovePayPeriodArg {
 
 export async function postApprovePayPeriod(arg: ApprovePayPeriodArg): Promise<GetUserInfoSuccessResponse | GetUserInfoErrorResponse | null> {
     try {
+        const params = new URLSearchParams();
+        params.set('action', 'approve');
+        params.set('code', arg.code);
+
         const body = JSON.stringify({
             action: 'approve',
             code: arg.code,
             idEmployee: arg.idEmployee,
             idPayPeriod: arg.idPayPeriod,
         });
-        const res = await fetchJSON<GetUserInfoSuccessResponse | GetUserInfoErrorResponse>(CLOCK_ACTION_URL, {
+        const url = `${CLOCK_ACTION_URL}?${params.toString()}`;
+        const res = await fetchJSON<GetUserInfoSuccessResponse | GetUserInfoErrorResponse>(url, {
             method: "POST",
             body
         });
