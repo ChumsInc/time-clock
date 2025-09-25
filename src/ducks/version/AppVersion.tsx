@@ -30,6 +30,16 @@ export default function AppVersion() {
     const intervalRef = useRef<number>(0);
 
     useEffect(() => {
+        if (version) {
+            const params = new URLSearchParams();
+            params.set("version", version);
+            const url = new URL(window.location.href);
+            url.search = params.toString();
+            window.history.replaceState({version}, '', url.toString());
+        }
+    }, [version]);
+
+    useEffect(() => {
         dispatch(loadVersion());
         intervalRef.current = window.setInterval(() => {
             dispatch(loadVersion());
