@@ -1,5 +1,5 @@
 import {useEffect, useRef, useState} from 'react';
-import {toSeconds} from "../../utils";
+import {toSeconds} from "@/utils/date-utils.ts";
 
 
 export interface TimeProps {
@@ -11,19 +11,27 @@ export interface TimeProps {
 }
 
 
-const Time = ({
-                  hours = 0,
-                  minutes = 0,
-                  seconds = 0,
-                  showSeconds,
-                  showIncrement
-              }: TimeProps) => {
-    const timerRef = useRef<number>(0);
-    const [time, setTime] = useState(toSeconds({hours, minutes, seconds}));
+export default function TimeDisplay({
+                                        hours = 0,
+                                        minutes = 0,
+                                        seconds = 0,
+                                        showSeconds,
+                                        showIncrement
+                                    }: TimeProps) {
+    const value = toSeconds({hours, minutes, seconds});
+    return (
+        <TimeContent durationInSeconds={value} key={value} showSeconds={showSeconds} showIncrement={showIncrement}/>
+    )
+}
 
-    useEffect(() => {
-        setTime(toSeconds({hours, minutes, seconds}));
-    }, [hours, minutes, seconds]);
+interface TimeContentProps {
+    durationInSeconds: number,
+    showIncrement?: boolean,
+    showSeconds?: boolean,
+}
+function TimeContent({durationInSeconds, showSeconds, showIncrement}: TimeContentProps) {
+    const [time, setTime] = useState(durationInSeconds);
+    const timerRef = useRef<number>(0);
 
     useEffect(() => {
         if (showIncrement) {
@@ -31,13 +39,10 @@ const Time = ({
                 setTime((time) => time + 1);
             }, 1000);
         }
-
-        return function () {
+        return () => {
             window.clearInterval(timerRef.current);
         }
-    }, []);
-
-
+    }, [showIncrement]);
     return (
         <span>
             <TimeMinutes value={time}/>
@@ -65,5 +70,3 @@ function TimeSeconds({value}: { value: number }) {
 
     return (<span>{seconds.toString().padStart(2, '0')}</span>)
 }
-
-export default Time

@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import {useCallback, useEffect, useRef, useState} from 'react';
 import {ProgressBar} from "react-bootstrap";
 import type {Variant} from "react-bootstrap/types";
 
@@ -16,48 +16,42 @@ const calcVariant = (pct: number): Variant => {
 }
 
 export interface CountdownTimerProps {
-    startOffset?: number,
+    startDelay?: number,
     duration?: number,
     rate?: number,
     onComplete: () => void,
 }
 
-const CountdownTimer = ({startOffset = 0, duration = 100, rate = 100, onComplete}: CountdownTimerProps) => {
-    const [offsetTimeout, setOffsetTimeout] = useState(0);
-    const [interval, setInterval] = useState(0);
-
+export default function CountdownTimer({startDelay = 0, duration = 100, rate = 100, onComplete}: CountdownTimerProps) {
+    const timeoutRef = useRef<number>(0);
+    const intervalRef = useRef<number>(0);
     const [remaining, setRemaining] = useState(duration);
+    const startTimer = useCallback(() => {
+        setRemaining(duration);
+        intervalRef.current = window.setInterval(() => {
+            setRemaining(remaining => remaining - 1);
+        }, rate);
+    }, [duration, rate])
+
 
     useEffect(() => {
-        window.clearTimeout(offsetTimeout);
-        window.clearInterval(interval);
-        if (startOffset > 50) {
-            const timeout = window.setTimeout(startTimer, startOffset);
-            setOffsetTimeout(timeout)
-        } else {
-            startTimer();
-        }
+        window.clearTimeout(timeoutRef.current);
+        window.clearInterval(intervalRef.current);
+        timeoutRef.current = window.setTimeout(startTimer, startDelay);
         return function () {
-            window.clearInterval(interval);
-            window.clearTimeout(offsetTimeout);
+            window.clearInterval(intervalRef.current);
+            window.clearTimeout(timeoutRef.current);
         }
-    }, []);
+    }, [startDelay, startTimer]);
 
     useEffect(() => {
         if (remaining <= 0) {
-            window.clearTimeout(offsetTimeout);
-            window.clearInterval(interval);
+            window.clearTimeout(timeoutRef.current);
+            window.clearInterval(intervalRef.current);
             onComplete();
         }
-    }, [remaining])
+    }, [remaining, onComplete])
 
-    const startTimer = () => {
-        setRemaining(duration);
-        const intervalHandler = window.setInterval(() => {
-            setRemaining(remaining => remaining - 1);
-        }, rate);
-        setInterval(intervalHandler);
-    }
 
 
     if (!duration || !remaining) {
@@ -68,5 +62,3 @@ const CountdownTimer = ({startOffset = 0, duration = 100, rate = 100, onComplete
         <ProgressBar variant={calcVariant(pct)} now={pct * 100} className="my-3"></ProgressBar>
     )
 }
-
-export default CountdownTimer;

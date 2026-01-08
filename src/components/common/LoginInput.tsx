@@ -1,8 +1,7 @@
-import {type ChangeEvent, type RefObject, useEffect, useId, useState} from 'react';
+import {type ChangeEvent, type RefObject, useEffect, useId, useRef, useState} from 'react';
 import {useSelector} from 'react-redux';
 import CancelIcon from "./CancelIcon";
-import {selectUserCode, selectUserLoading, setCode,} from "@/ducks/user";
-import {useAppDispatch} from "@/app/configureStore";
+import {selectUserLoading,} from "@/ducks/user";
 import FormControl, {type FormControlProps} from "react-bootstrap/FormControl";
 import InputGroup, {type InputGroupProps} from 'react-bootstrap/InputGroup'
 import Button from "react-bootstrap/Button";
@@ -15,28 +14,48 @@ const StyledInputGroup = styled(InputGroup)`
         -webkit-text-security: disc;
     }
 `
-interface LoginInputProps extends InputGroupProps {
+
+interface LoginInputProps extends Omit<InputGroupProps,'value'|'onChange' > {
     ref: RefObject<HTMLInputElement | null>;
-    inputProps?: Omit<FormControlProps, 'value' | 'onChange'>;
+    value: string;
+    onChange: (value: string) => void;
+    inputProps?: Omit<FormControlProps, 'value'|'onChange'>;
 }
 
-const LoginInput = ({ref, inputProps}: LoginInputProps) => {
-    const dispatch = useAppDispatch();
-    const code = useSelector(selectUserCode);
+export default function LoginInput({ref, value, onChange, inputProps}: LoginInputProps) {
     const loading = useSelector(selectUserLoading);
-    const id = inputProps?.id ?? useId();
+    const id = useId();
     const [show, setShow] = useState(false);
+    const timerRef = useRef<number>(0);
+
+    useEffect(() => {
+        timerRef.current = window.setTimeout(() => {
+            onChange('');
+        }, 30000);
+        return function cleanUp() {
+            window.clearInterval(timerRef.current);
+        }
+    }, [onChange]);
 
     useEffect(() => {
         ref?.current?.focus();
-    }, []);
+    }, [ref]);
 
     const onToggleShow = () => {
         setShow(!show);
     }
 
-    const onCancel = () => dispatch(setCode(''));
-    const onChange = (ev: ChangeEvent<HTMLInputElement>) => dispatch(setCode(ev.target.value));
+    const onCancel = () => {
+        if (!ref.current) {
+            return;
+        }
+        ref.current.value = '';
+        setShow(false);
+    }
+
+    const changeHandler = (ev: ChangeEvent<HTMLInputElement>) => {
+        onChange(ev.target.value);
+    }
 
     /**
      * Note:
@@ -53,22 +72,22 @@ const LoginInput = ({ref, inputProps}: LoginInputProps) => {
     return (
 
         <StyledInputGroup>
-            <InputGroup.Text as="label" htmlFor={id}>
+            <InputGroup.Text as="label" htmlFor={inputProps?.id ?? id}>
                 <span className="me-3">Login</span>
                 <span className="bi-key-fill" role="presentation"/>
             </InputGroup.Text>
             <FormControl type="text" autoComplete="off"
                          className={classNames({'show-pin': show})}
-                         id={id}
+                         id={inputProps?.id ?? id}
                          ref={ref}
-                         value={code} onChange={onChange}
+                         value={value} onChange={changeHandler}
                          minLength={4}
                          required={true}
                          disabled={loading}
                          {...inputProps}
             />
-            <Button type="button" variant={show ? "secondary" : 'outline-secondary'} onClick={onToggleShow} >
-                <ViewPinIcon visible={show} />
+            <Button type="button" variant={show ? "secondary" : 'outline-secondary'} onClick={onToggleShow}>
+                <ViewPinIcon visible={show}/>
             </Button>
             <Button type="reset" variant="outline-secondary" onClick={onCancel} disabled={loading}>
                 <CancelIcon/>
@@ -76,5 +95,3 @@ const LoginInput = ({ref, inputProps}: LoginInputProps) => {
         </StyledInputGroup>
     );
 }
-
-export default LoginInput;

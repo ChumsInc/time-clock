@@ -8,6 +8,7 @@ import userSlice from "@/ducks/user";
 import entriesSlice from "@/ducks/entries";
 import versionSlice from "@/ducks/version";
 
+
 const rootReducer = combineReducers({
     [alertsSlice.reducerPath]: alertsSlice.reducer,
     [bannersSlice.reducerPath]: bannersSlice.reducer,

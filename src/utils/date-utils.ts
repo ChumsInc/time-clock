@@ -1,4 +1,4 @@
-import type {TCTime} from "./types";
+import type {TCTime} from "../types.ts";
 
 export const toSeconds = ({hours = 0, minutes = 0, seconds = 0}:TCTime): number => {
     return (hours || 0) * 3600
@@ -13,3 +13,4 @@ export const calcTimeUnits = (val:number):TCTime => {
     return {hours, minutes, seconds};
 }
 
+export const dateRange = (start: number, end: number): string => `${new Date(start * 1000).toLocaleDateString()} - ${new Date(end * 1000).toLocaleDateString()}`;

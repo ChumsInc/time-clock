@@ -1,6 +1,6 @@
 import {useId} from 'react';
 import classNames from "classnames";
-import Time, {type TimeProps} from "./Time";
+import TimeDisplay, {type TimeProps} from "./TimeDisplay.tsx";
 import styled from "@emotion/styled";
 
 const TimeGroup = styled.div`
@@ -8,9 +8,11 @@ const TimeGroup = styled.div`
     flex-direction: row;
     align-items: baseline;
     padding: 0 0.25rem;
+
     .form-control {
         text-align: center;
     }
+
     .form-label {
         font-weight: bold;
         white-space: nowrap;
@@ -18,7 +20,8 @@ const TimeGroup = styled.div`
         flex: 0 0 25%;
         margin-bottom: 0;
     }
-    @media screen and (min-width: 480px){
+
+    @media screen and (min-width: 480px) {
         flex-direction: column;
         flex: 1 1 calc(20% - 0.25rem);
         .form-label {
@@ -27,31 +30,29 @@ const TimeGroup = styled.div`
         }
     }
 `
+
 export interface TimeFieldProps extends TimeProps {
     label: string,
     className?: string,
 }
 
-const TimeField =
-    ({
-         hours = 0,
-         minutes = 0,
-         seconds = 0,
-         showIncrement,
-         showSeconds,
-         label,
-         className = '',
-     }: TimeFieldProps) => {
-        const id = useId();
-        return (
-            <TimeGroup>
-                <label className="form-label" id={id}>{label}</label>
-                <div className={classNames("form-control", className)} aria-describedby={id}>
-                    <Time hours={hours} minutes={minutes} seconds={seconds}
-                          showSeconds={showSeconds} showIncrement={showIncrement}/>
-                </div>
-            </TimeGroup>
-        );
-    };
-
-export default TimeField;
+export default function TimeField({
+                                      hours = 0,
+                                      minutes = 0,
+                                      seconds = 0,
+                                      showIncrement,
+                                      showSeconds,
+                                      label,
+                                      className = '',
+                                  }: TimeFieldProps) {
+    const id = useId();
+    return (
+        <TimeGroup>
+            <label className="form-label" id={id}>{label}</label>
+            <div className={classNames("form-control", className)} aria-describedby={id}>
+                <TimeDisplay hours={hours} minutes={minutes} seconds={seconds}
+                             showSeconds={showSeconds} showIncrement={showIncrement}/>
+            </div>
+        </TimeGroup>
+    )
+}

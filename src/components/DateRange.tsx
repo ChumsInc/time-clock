@@ -1,8 +1,6 @@
 import React from 'react';
 
 
-export const dateRange = (start: number, end: number): string => `${new Date(start * 1000).toLocaleDateString()} - ${new Date(end * 1000).toLocaleDateString()}`;
-
 export interface DateRangeProps {
     start: number,
     end: number

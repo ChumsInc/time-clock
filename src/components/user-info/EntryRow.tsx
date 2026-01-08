@@ -1,8 +1,7 @@
-import React from 'react';
 import classNames from "classnames";
 import EntryType from "./EntryType";
 import {ENTRY_TIMECLOCK, type PayPeriodEntry} from "../../types";
-import Time from "./Time";
+import TimeDisplay from "./TimeDisplay.tsx";
 import styled from "@emotion/styled";
 
 const timeFormat: Intl.DateTimeFormatOptions = {hour: '2-digit', minute: '2-digit', hour12: true};
@@ -46,7 +45,7 @@ export interface EntryRowProps {
     entry: PayPeriodEntry,
 }
 
-const EntryRow: React.FC<EntryRowProps> = ({entry}) => {
+export default function EntryRow({entry}:EntryRowProps) {
     const {
         idEntryType,
         Approved,
@@ -83,9 +82,7 @@ const EntryRow: React.FC<EntryRowProps> = ({entry}) => {
                 {!clockOutTime && idEntryType === ENTRY_TIMECLOCK && isClockedIn && (<span>&mdash;</span>)}
                 {!clockOutTime && idEntryType !== ENTRY_TIMECLOCK && (<span>&mdash;</span>)}
             </td>
-            <td className="right"><Time seconds={Duration}/></td>
+            <td className="right"><TimeDisplay seconds={Duration}/></td>
         </tr>
     )
 }
-
-export default EntryRow;

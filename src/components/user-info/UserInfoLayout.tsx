@@ -4,8 +4,7 @@ import EmployeeEntry from "./EmployeeEntry";
 import EmployeePayPeriodSummary from "./EmployeePayPeriodSummary";
 import {Accordion} from "react-bootstrap";
 
-const UserInfo = () => {
-
+export default function UserInfoLayout() {
     return (
         <div className="tc__user-info mb-3">
             <EmployeeName/>
@@ -15,7 +14,5 @@ const UserInfo = () => {
                 <EmployeePlSummary eventKey="pl-summary"/>
             </Accordion>
         </div>
-    );
+    )
 }
-
-export default UserInfo;

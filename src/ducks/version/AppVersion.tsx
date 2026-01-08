@@ -48,7 +48,7 @@ export default function AppVersion() {
         return () => {
             window.clearInterval(intervalRef.current);
         }
-    }, [updateCheckInterval]);
+    }, [dispatch]);
 
     useEffect(() => {
         if (shouldReload) {

@@ -1,4 +1,4 @@
-import React from 'react';
+import {useState} from 'react';
 import UserInfoPage from "@/components/user-info/UserInfoPage";
 import ApprovalPage from "@/components/user-info/ApprovalPage";
 import AppVersion from "../ducks/version/AppVersion";
@@ -8,7 +8,7 @@ import ClockActionPage from "@/components/clock-action/ClockActionPage.tsx";
 import PageContainer from "@/components/common/PageContainer.tsx";
 
 export default function App() {
-    const [tab, setTab] = React.useState<string | null>('clock');
+    const [tab, setTab] = useState<string | null>('clock');
 
     return (
         <div className="container tc__container">

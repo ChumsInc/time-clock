@@ -56,9 +56,7 @@ const payPeriodsSlice = createSlice({
         //@todo: handle load employee (set start date, set currentPayPeriod)
     },
     selectors: {
-        selectCurrentPayPeriod: (state) => {
-            state.current;
-        },
+        selectCurrentPayPeriod: (state) => state.current,
         selectHireDate: (state) => state.hireDate,
         selectAllPayPeriods: (state) => adapterSelectors.selectAll(state),
     },
@@ -92,7 +90,8 @@ export const selectClosedPayPeriods = createSelector(
             .filter(pp => pp.completed)
             .filter(pp => dayjs(pp.endDate).isAfter(hireDate))
             .sort(payPeriodSorter)
-            .reverse();
+            .reverse()
+            .slice(0, 4)
     }
 )
 

@@ -1,7 +1,6 @@
-import {useEffect, useState} from 'react';
+import {useEffect, useRef, useState} from 'react';
 import styled from "@emotion/styled";
-
-let timer: number = 0;
+import {useVisibility} from "@/hooks/useVisibility.ts";
 
 const DateTimeContainer = styled.div`
     text-align: center;
@@ -39,19 +38,25 @@ const TimeContainer = styled.div`
         font-size: 8vw;
     }
 `
-const CurrentDateTime = () => {
-    const [now, setNow] = useState(new Date());
+export default function CurrentDateTime() {
+    const timerRef = useRef<number>(0);
+    const [value, setValue] = useState(new Date().valueOf());
+    const visible = useVisibility();
 
     useEffect(() => {
-        timer = window.setInterval(() => {
-            setNow(new Date());
+        if (!visible) {
+            return;
+        }
+        timerRef.current = window.setInterval(() => {
+            setValue(new Date().valueOf());
         }, 1000);
 
         return function cleanUp() {
-            window.clearInterval(timer);
+            window.clearInterval(timerRef.current);
         }
-    }, [])
+    }, [visible])
 
+    const now = new Date(value);
     return (
         <DateTimeContainer>
             <DateContainer>
@@ -62,4 +67,3 @@ const CurrentDateTime = () => {
         </DateTimeContainer>
     );
 }
-export default CurrentDateTime;

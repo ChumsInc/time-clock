@@ -10,8 +10,7 @@ const tcTabs: TabDetail[] = [
 ]
 
 
-
-const TabBar = ({activeKey, onSelect, ...rest }:NavProps) => {
+export default function TabBar({activeKey, onSelect, ...rest}: NavProps) {
     return (
         <Nav fill activeKey={activeKey ?? 'clock'} onSelect={onSelect} variant="tabs" {...rest}>
             {tcTabs.map(tab => (
@@ -24,4 +23,3 @@ const TabBar = ({activeKey, onSelect, ...rest }:NavProps) => {
         </Nav>
     );
 }
-export default TabBar;

@@ -1,4 +1,4 @@
-import {type FormEvent, useEffect, useRef} from 'react';
+import {type FormEvent, useEffect, useRef, useState} from 'react';
 import classNames from 'classnames';
 import LoginInput from "../common/LoginInput";
 import CountdownTimer from "../common/CountdownTimer";
@@ -11,30 +11,33 @@ import {ClockButtons} from "@/components/common/ClockButtons";
 export interface UserLoginFormProps {
     className?: string,
     timerOffset?: number,
-    onLogin: () => void,
+    onLogin: (code:string) => void,
     onCancel: () => void,
 }
 
-const UserLoginForm = ({
-                           className = '',
-                           timerOffset = 0,
-                           onLogin,
-                           onCancel
-                       }: UserLoginFormProps) => {
+export default function UserLoginForm({
+                                          className = '',
+                                          timerOffset = 0,
+                                          onLogin,
+                                          onCancel
+                                      }: UserLoginFormProps) {
     const inputRef = useRef<HTMLInputElement>(null);
+    const [code, setCode] = useState<string>('');
+
     useEffect(() => {
         inputRef.current?.focus();
     }, []);
 
     const onSubmit = (ev: FormEvent) => {
         ev.preventDefault();
-        onLogin();
+        onLogin(code);
     }
 
     return (
         <form className={classNames(className)} onSubmit={onSubmit}>
-            <LoginInput ref={inputRef}/>
-            {!!timerOffset && <CountdownTimer startOffset={timerOffset} onComplete={onCancel}/>}
+            <LoginInput ref={inputRef} value={code} onChange={setCode}
+                        inputProps={{required: true}}/>
+            {timerOffset > 0 && <CountdownTimer startDelay={timerOffset} onComplete={onCancel}/>}
             <ClockButtons className="mt-3">
                 <Button type="submit" variant="primary">
                     <span>Log In</span>
@@ -47,6 +50,4 @@ const UserLoginForm = ({
             </ClockButtons>
         </form>
     );
-};
-
-export default UserLoginForm;
+}

@@ -16,12 +16,12 @@ export interface BlockButtonProps extends ButtonProps {
     containerClassName?: string,
 }
 
-const BlockButton = ({
-                         containerClassName = '',
-                         onClick,
-                         children,
-                         ...rest
-                     }: BlockButtonProps) => {
+export default function BlockButton({
+                                        containerClassName = '',
+                                        onClick,
+                                        children,
+                                        ...rest
+                                    }: BlockButtonProps) {
     return (
         <Block className={containerClassName}>
             <Button onClick={onClick} {...rest}>
@@ -29,6 +29,4 @@ const BlockButton = ({
             </Button>
         </Block>
     );
-};
-
-export default BlockButton;
+}

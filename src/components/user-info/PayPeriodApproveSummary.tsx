@@ -21,7 +21,7 @@ const ApprovalForm = styled.div`
     }
 `
 
-const PayPeriodApproveSummary = ({eventKey}: { eventKey: string }) => {
+export default function PayPeriodApproveSummary({eventKey}: { eventKey: string }) {
     const dispatch = useAppDispatch();
     const employee = useSelector(selectEmployee);
     const payPeriod = useAppSelector(selectEmployeePayPeriod);
@@ -34,7 +34,7 @@ const PayPeriodApproveSummary = ({eventKey}: { eventKey: string }) => {
         if (!employee && !loading && !!code) {
             dispatch(getUserInfo({code}));
         }
-    }, [])
+    }, [dispatch, code, loading, employee]);
 
     if (!employee || !payPeriod) {
         return null;
@@ -82,8 +82,9 @@ const PayPeriodApproveSummary = ({eventKey}: { eventKey: string }) => {
                     </BlockButton>
                 )}
                 {isClockedIn && (
-                    <Alert variant="info" title="Notice:">You are currently still clocked in for this pay
-                        period.</Alert>
+                    <Alert variant="info" title="Notice:">
+                        You are currently still clocked in for this pay period.
+                    </Alert>
                 )}
                 {payPeriod.employeeApproved && (
                     <Alert title="Approved:" variant="success">You have approved this pay period
@@ -101,7 +102,5 @@ const PayPeriodApproveSummary = ({eventKey}: { eventKey: string }) => {
                 )}
             </Accordion.Body>
         </Accordion.Item>
-    );
+    )
 }
-
-export default PayPeriodApproveSummary;

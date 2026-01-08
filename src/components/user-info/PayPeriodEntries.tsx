@@ -1,4 +1,3 @@
-import React, {useEffect} from 'react';
 import {useSelector} from 'react-redux';
 import DateRange from "../DateRange";
 import EntryRow from "./EntryRow";
@@ -8,39 +7,7 @@ import {selectEntries} from "@/ducks/entries";
 import type {PayPeriodEntry, PayPeriodWeek} from "@/src/types";
 import {Accordion} from "react-bootstrap";
 
-interface WeekHeaderProps {
-    start: number,
-    end: number,
-}
-
-const WeekHeader = ({start, end}: WeekHeaderProps) => (
-    <tr>
-        <th colSpan={6}>
-            <DateRange start={start} end={end}/>
-        </th>
-    </tr>
-)
-
-const WeekTBody = ({week, entries}: { week: PayPeriodWeek, entries: PayPeriodEntry[] }) => {
-    const [list, setList] = React.useState<PayPeriodEntry[]>([]);
-
-
-    useEffect(() => {
-        const list = entries.filter(e => e.EntryDate >= week.start && e.EntryDate <= week.end);
-        setList(list);
-    }, [entries, week])
-
-    return (
-        <tbody>
-        <WeekHeader start={week.start} end={week.end}/>
-        {list.map(entry => (
-            <EntryRow key={entry.id} entry={entry}/>
-        ))}
-        </tbody>
-    )
-}
-
-const PayPeriodEntries = ({eventKey}:{eventKey:string}) => {
+export default function PayPeriodEntries({eventKey}: { eventKey: string }) {
     const employee = useSelector(selectEmployee);
     const payPeriod = useSelector(selectEmployeePayPeriod);
     const entries = useAppSelector(selectEntries)
@@ -72,8 +39,37 @@ const PayPeriodEntries = ({eventKey}:{eventKey:string}) => {
                 </div>
             </Accordion.Body>
         </Accordion.Item>
-
-    );
+    )
 }
 
-export default PayPeriodEntries;
+
+interface WeekHeaderProps {
+    start: number,
+    end: number,
+}
+
+function WeekHeader({start, end}: WeekHeaderProps) {
+    return (
+        <tr>
+            <th colSpan={6}>
+                <DateRange start={start} end={end}/>
+            </th>
+        </tr>
+    )
+}
+
+interface WeekTBodyProps {
+    week: PayPeriodWeek,
+    entries: PayPeriodEntry[]
+}
+function WeekTBody({week, entries}: WeekTBodyProps) {
+    return (
+        <tbody>
+        <WeekHeader start={week.start} end={week.end}/>
+        {entries.filter(e => e.EntryDate >= week.start && e.EntryDate <= week.end)
+            .map(entry => (
+                <EntryRow key={entry.id} entry={entry}/>
+            ))}
+        </tbody>
+    )
+}
