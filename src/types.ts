@@ -113,14 +113,14 @@ export interface EntryTypeDescriptions {
     [key: number]: string,
 }
 export const ENTRY_TYPE_DESCRIPTIONS:EntryTypeDescriptions = {
-    [ENTRY_TIMECLOCK]: 'TimeDisplay Clock',
+    [ENTRY_TIMECLOCK]: 'Time Clock',
     [ENTRY_MANUAL]: 'Manual Entry',
     [ENTRY_HOLIDAY]: 'Holiday',
     [ENTRY_PL]: 'Personal Leave',
     [ENTRY_BEREAVJURY]: 'Bereavement/Jury Duty',
     [ENTRY_AUTOMATIC]: 'Salary (Automated)',
-    [ENTRY_COMPANY_TIME]: 'Company TimeDisplay',
-    [ENTRY_SWAP_TIME]: 'Swap TimeDisplay',
+    [ENTRY_COMPANY_TIME]: 'Company Time',
+    [ENTRY_SWAP_TIME]: 'Swap Time',
     [ENTRY_SUH]: 'Southern Utah Holdings',
     [ENTRY_FMLA67]: 'FMLA Leave',
     [ENTRY_FMLA100]: 'FMLA Leave',

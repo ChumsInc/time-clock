@@ -5,7 +5,7 @@ use chums\ui\WebUI2;
 require_once 'autoload.inc.php';
 
 $ui = new WebUI2([
-    'title' => 'Chums TimeDisplay Clock',
+    'title' => 'Chums Time Clock',
     'bodyClassName' => 'container',
     'contentFile' => 'body.inc.php',
     'requiredRoles' => [],
