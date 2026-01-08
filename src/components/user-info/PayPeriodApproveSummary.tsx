@@ -82,22 +82,22 @@ export default function PayPeriodApproveSummary({eventKey}: { eventKey: string }
                     </BlockButton>
                 )}
                 {isClockedIn && (
-                    <Alert variant="info" title="Notice:">
+                    <Alert variant="info" title="Notice:" className="mt-3">
                         You are currently still clocked in for this pay period.
                     </Alert>
                 )}
                 {payPeriod.employeeApproved && (
-                    <Alert title="Approved:" variant="success">You have approved this pay period
+                    <Alert title="Approved:" variant="success" className="mt-3">You have approved this pay period
                         at <strong>{dayjs(payPeriod.employeeApprovalTime).format('ddd, DD MMM YYYY @ hh:mm a')}</strong>
                     </Alert>
                 )}
                 {payPeriod.approved && (
-                    <Alert title="Supervisor Approved:" variant="success">{payPeriod.approvedByName} approved this pay period
+                    <Alert title="Supervisor Approved:" variant="success" className="mt-3">{payPeriod.approvedByName} approved this pay period
                         at <strong>{dayjs(payPeriod.approvalTime).format('ddd, DD MMM YYYY @ hh:mm a')}</strong>
                     </Alert>
                 )}
                 {hasErrors && (
-                    <Alert title="Notice:" variant="danger">Please see your supervisor to fix the following errors
+                    <Alert title="Notice:" variant="danger" className="mt-3">Please see your supervisor to fix the following errors
                         before approving your time.</Alert>
                 )}
             </Accordion.Body>
